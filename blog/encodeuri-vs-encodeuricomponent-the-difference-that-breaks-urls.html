@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>encodeURI vs encodeURIComponent: The Difference That Breaks URLs</title>
+  <meta name="description" content="Master the difference between encodeURI and encodeURIComponent under RFC 3986. Learn reserved character sets, query parameter encoding, plus vs %20, and how to avoid bugs.">
+  <link rel="canonical" href="https://devforge.tools/blog/encodeuri-vs-encodeuricomponent-the-difference-that-breaks-urls.html">
+  <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
+  <link rel="stylesheet" href="/assets/css/styles.css">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://devforge.tools/blog/encodeuri-vs-encodeuricomponent-the-difference-that-breaks-urls.html">
+  <meta property="og:title" content="encodeURI vs encodeURIComponent: The Difference That Breaks URLs">
+  <meta property="og:description" content="Avoid broken query strings and malformed URI bugs. Detailed comparison of reserved characters and URI encoding rules.">
+  <meta property="og:image" content="https://devforge.tools/assets/img/favicon.svg">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="encodeURI vs encodeURIComponent: The Difference That Breaks URLs">
+  <meta name="twitter:description" content="Technical guide on RFC 3986 percent-encoding in JavaScript and web architectures.">
+  <meta name="twitter:image" content="https://devforge.tools/assets/img/favicon.svg">
+
+  <!-- Google AdSense Placeholder (Replace ca-pub-XXXXXXXXXXXXXXXX) -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "encodeURI vs encodeURIComponent: The Difference That Breaks URLs",
+    "description": "A comprehensive analysis of JavaScript URI encoding functions, RFC 3986 reserved character rules, and avoiding production bugs.",
+    "author": {
+      "@type": "Person",
+      "name": "Alex Mercer",
+      "jobTitle": "Principal Platform Engineer",
+      "url": "https://devforge.tools/about.html"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "DevForge Tools",
+      "url": "https://devforge.tools/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://devforge.tools/assets/img/favicon.svg"
+      }
+    },
+    "datePublished": "2026-03-03T08:30:00Z",
+    "dateModified": "2026-03-05T12:00:00Z",
+    "mainEntityOfPage": "https://devforge.tools/blog/encodeuri-vs-encodeuricomponent-the-difference-that-breaks-urls.html"
+  }
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="brand-link">
+        <svg class="w-6 h-6 text-cyan-500" viewBox="0 0 32 32" fill="none" style="width:26px;height:26px;" aria-hidden="true">
+          <rect width="32" height="32" rx="7" fill="#0f172a"/>
+          <path d="M10 11L5 16L10 21" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M22 11L27 16L22 21" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M18 9L14 23" stroke="#818cf8" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="16" cy="16" r="1.5" fill="#38bdf8"/>
+        </svg>
+        <span>DevForge Tools</span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="/" class="nav-item">Home</a>
+        <div class="nav-dropdown">
+          <a href="/#tools" class="nav-item">Tools <span style="font-size: 0.65rem;">▼</span></a>
+          <div class="dropdown-menu">
+            <a href="/tools/json-formatter.html" class="dropdown-item">JSON Formatter & Validator</a>
+            <a href="/tools/html-minifier.html" class="dropdown-item">HTML Minifier</a>
+            <a href="/tools/css-beautifier.html" class="dropdown-item">CSS Beautifier & Minifier</a>
+            <a href="/tools/base64-encoder.html" class="dropdown-item">Base64 Encoder & Decoder</a>
+            <a href="/tools/url-encoder.html" class="dropdown-item">URL Encoder & Decoder</a>
+            <a href="/tools/uuid-generator.html" class="dropdown-item">UUID Generator (v4 & v7)</a>
+          </div>
+        </div>
+        <a href="/blog/" class="nav-item active">Blog</a>
+        <a href="/about.html" class="nav-item">About</a>
+        <a href="/contact.html" class="nav-item">Contact</a>
+      </nav>
+
+      <div class="header-actions">
+        <a href="/#tools" class="btn btn-sm">All Tools</a>
+          <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle navigation menu" aria-expanded="false" onclick="DevForgeUI.toggleMobileMenu()">
+            <svg class="hamburger-icon" style="width:20px;height:20px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            <svg class="close-icon" style="width:20px;height:20px;display:none;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding-top: 2rem; padding-bottom: 5rem;">
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span>/</span>
+      <a href="/blog/">Blog</a>
+      <span>/</span>
+      <span style="color: var(--text-primary); font-weight: 500;">encodeURI vs encodeURIComponent</span>
+    </nav>
+
+    <article class="content-section">
+      <!-- Article Header -->
+      <header style="margin-bottom: 2rem;">
+        <h1 style="font-size: clamp(2rem, 4vw, 2.75rem); line-height: 1.2; margin-bottom: 0.75rem;">
+          encodeURI vs encodeURIComponent: The Difference That Breaks URLs
+        </h1>
+        <div style="font-size: 0.875rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+          <span>By <strong>Alex Mercer</strong> (Principal Platform Engineer)</span>
+          <span>·</span>
+          <span>Published March 3, 2026</span>
+          <span>·</span>
+          <span>Updated March 5, 2026</span>
+          <span>·</span>
+          <span>7 min read</span>
+        </div>
+      </header>
+
+      <!-- Inactive Reserved Ad Slot -->
+      <!--
+      <div class="adsense-slot ad-leaderboard" aria-label="Advertisement Banner">
+        <ins class="adsbygoogle"
+             style="display:inline-block;width:728px;height:90px"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+             data-ad-slot="3333444455"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+      -->
+
+      <p>
+        Few JavaScript API bugs are as widespread, quiet, and destructive as the confusion between <code>encodeURI()</code> and <code>encodeURIComponent()</code>. In production web applications, using the wrong method creates subtle bugs that pass standard unit tests but fail catastrophically in staging when a user enters an ampersand in a search query, passes an email address with a plus sign, or navigates via an OAuth redirect URL.
+      </p>
+      <p>
+        Both functions perform percent-encoding according to <a href="https://www.rfc-editor.org/rfc/rfc3986" target="_blank" rel="noopener">IETF RFC 3986</a>. However, they were architected for fundamentally different scopes within a Uniform Resource Identifier. In this guide, we break down the character taxonomy, illustrate the exact failure modes, and provide a clear decision framework.
+      </p>
+
+      <h2>The URI Anatomy and Character Taxonomy</h2>
+      <p>
+        Under RFC 3986, a complete URI consists of structured hierarchical components:
+      </p>
+      <pre><code>  foo://example.com:8042/over/there?name=ferret#nose
+  \_/   \______________/\_________/ \_________/ \__/
+   |           |            |            |        |
+scheme     authority       path        query   fragment</code></pre>
+      <p>
+        To delimit these separate components without ambiguity, the specification divides ASCII characters into two categories:
+      </p>
+      <ul>
+        <li>
+          <strong>Reserved Characters:</strong> Characters that have syntactic meaning as delimiters:
+          <code>: / ? # [ ] @ ! $ & ' ( ) * + , ; =</code>
+        </li>
+        <li>
+          <strong>Unreserved Characters:</strong> Characters that have no syntactic meaning and can be passed without escaping:
+          <code>A-Z a-z 0-9 - _ . ~</code>
+        </li>
+      </ul>
+
+      <h2>The Definitive Character Comparison Matrix</h2>
+      <p>
+        The table below shows exactly how each JavaScript function treats critical characters:
+      </p>
+
+      <table class="data-table" style="margin: 1.5rem 0;">
+        <thead>
+          <tr>
+            <th>Character</th>
+            <th>encodeURI() Output</th>
+            <th>encodeURIComponent() Output</th>
+            <th>Syntactic Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>/</code> (slash)</td>
+            <td style="color: #10b981;">Preserved (<code>/</code>)</td>
+            <td style="color: #ef4444;">Encoded (<code>%2F</code>)</td>
+            <td>Path hierarchy separator</td>
+          </tr>
+          <tr>
+            <td><code>:</code> (colon)</td>
+            <td style="color: #10b981;">Preserved (<code>:</code>)</td>
+            <td style="color: #ef4444;">Encoded (<code>%3A</code>)</td>
+            <td>Scheme and port delimiter</td>
+          </tr>
+          <tr>
+            <td><code>?</code> (question mark)</td>
+            <td style="color: #10b981;">Preserved (<code>?</code>)</td>
+            <td style="color: #ef4444;">Encoded (<code>%3F</code>)</td>
+            <td>Query string initiator</td>
+          </tr>
+          <tr>
+            <td><code>&</code> (ampersand)</td>
+            <td style="color: #10b981;">Preserved (<code>&</code>)</td>
+            <td style="color: #ef4444;">Encoded (<code>%26</code>)</td>
+            <td>Query parameter separator</td>
+          </tr>
+          <tr>
+            <td><code>=</code> (equals)</td>
+            <td style="color: #10b981;">Preserved (<code>=</code>)</td>
+            <td style="color: #ef4444;">Encoded (<code>%3D</code>)</td>
+            <td>Query key-value assignment</td>
+          </tr>
+          <tr>
+            <td><code>#</code> (hash)</td>
+            <td style="color: #10b981;">Preserved (<code>#</code>)</td>
+            <td style="color: #ef4444;">Encoded (<code>%23</code>)</td>
+            <td>Fragment identifier</td>
+          </tr>
+          <tr>
+            <td><code>+</code> (plus sign)</td>
+            <td style="color: #10b981;">Preserved (<code>+</code>)</td>
+            <td style="color: #ef4444;">Encoded (<code>%2B</code>)</td>
+            <td>Application form space or literal plus</td>
+          </tr>
+          <tr>
+            <td><code>[Space]</code></td>
+            <td><code>%20</code></td>
+            <td><code>%20</code></td>
+            <td>Whitespace (always encoded)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>The Real-World Bug: How <code>encodeURI</code> Breaks Query Strings</h2>
+      <p>
+        Consider an e-commerce or search application where a user searches for products containing <code>"Bed & Breakfast"</code>:
+      </p>
+      <pre><code>// ❌ Fatal Mistake: Using encodeURI on user input
+const query = "Bed & Breakfast";
+const url = `https://api.store.com/search?q=${encodeURI(query)}`;
+console.log(url);
+// Output: "https://api.store.com/search?q=Bed & Breakfast"</code></pre>
+      <p>
+        Notice what happened: <code>encodeURI</code> deliberately preserved the ampersand (<code>&</code>) because it believed it was processing an entire URL! When your backend server (Express, Django, Spring Boot) parses this request, it sees two distinct parameters:
+      </p>
+      <ol>
+        <li><code>q = "Bed "</code></li>
+        <li><code>Breakfast = ""</code> (an unexpected separate parameter!)</li>
+      </ol>
+      <p>
+        The search yields zero results or crashes your backend parameter validator.
+      </p>
+
+      <h3>The Proper Solution: Using <code>encodeURIComponent</code> for Values</h3>
+      <pre><code>// ✅ Correct: Using encodeURIComponent on query parameter values
+const query = "Bed & Breakfast";
+const url = `https://api.store.com/search?q=${encodeURIComponent(query)}`;
+console.log(url);
+// Output: "https://api.store.com/search?q=Bed%20%26%20Breakfast"</code></pre>
+      <p>
+        Now the ampersand is safely escaped as <code>%26</code>. The server parses <code>q</code> as the single literal string <code>"Bed & Breakfast"</code> as intended.
+      </p>
+
+      <h2>When Should You Ever Use <code>encodeURI</code>?</h2>
+      <p>
+        If <code>encodeURIComponent</code> is so safe, why does <code>encodeURI</code> exist?
+      </p>
+      <p>
+        <code>encodeURI</code> is meant for sanitizing a complete, pre-constructed URL that already has all parameters assembled, where you simply need to encode illegal characters (like literal spaces or non-ASCII characters) without destroying the URL's structural syntax:
+      </p>
+      <pre><code>// ✅ Legitimate use of encodeURI:
+const fullUrl = "https://example.com/docs/getting started.html?lang=en";
+const safeUrl = encodeURI(fullUrl);
+// -> "https://example.com/docs/getting%20started.html?lang=en"</code></pre>
+      <p>
+        If you ran <code>encodeURIComponent</code> on that entire string, it would convert <code>https://</code> into <code>https%3A%2F%2F</code>, completely destroying the URL's ability to be resolved by browsers or HTTP clients!
+      </p>
+
+      <h2>The Modern Alternative: <code>URL</code> and <code>URLSearchParams</code></h2>
+      <p>
+        In modern ECMAScript environments, the safest approach to URL construction is using the native WHATWG <code>URL</code> and <code>URLSearchParams</code> classes, which apply <code>encodeURIComponent</code> automatically under the hood:
+      </p>
+      <pre><code>const url = new URL("https://api.devforge.tools/v1/search");
+url.searchParams.set("query", "C++ & Rust");
+url.searchParams.set("author", "Alex Mercer");
+
+console.log(url.toString());
+// -> "https://api.devforge.tools/v1/search?query=C%2B%2B+%26+Rust&author=Alex+Mercer"</code></pre>
+
+      <h2>Handling <code>URIError: malformed URI sequence</code></h2>
+      <p>
+        When decoding with <code>decodeURIComponent</code>, encountering an unescaped or truncated percent token (e.g. <code>"%E0%A4"</code> or a raw <code>"%"</code> sign) throws a fatal JavaScript <code>URIError</code>:
+      </p>
+      <pre><code>try {
+  const result = decodeURIComponent(untrustedInput);
+} catch (err) {
+  // Gracefully handle incomplete % escapes
+  console.error("Malformed sequence detected:", err.message);
+}</code></pre>
+
+      <h2>Further Reading & Authoritative References</h2>
+      <ul>
+        <li><a href="https://www.rfc-editor.org/rfc/rfc3986" target="_blank" rel="noopener">IETF RFC 3986: Uniform Resource Identifier (URI): Generic Syntax</a></li>
+        <li><a href="/tools/url-encoder.html">DevForge URL Encoder, Decoder & Query String Inspector</a></li>
+        <li><a href="/blog/base64-encoding-explained-what-it-is-and-when-to-use-it.html">Base64 Encoding Explained</a></li>
+        <li><a href="/blog/how-to-read-and-debug-api-responses-faster.html">How to Read and Debug API Responses Faster</a></li>
+      </ul>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>DevForge Tools</h4>
+          <p style="color: var(--text-muted); font-size: 0.8125rem;">100% client-side developer utilities running locally in your browser. Format, minify, and encode with complete confidentiality.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Related Tools</h4>
+          <ul>
+            <li><a href="/tools/url-encoder.html">URL Encoder & Decoder</a></li>
+            <li><a href="/tools/base64-encoder.html">Base64 Encoder & Decoder</a></li>
+            <li><a href="/tools/json-formatter.html">JSON Formatter & Validator</a></li>
+            <li><a href="/tools/uuid-generator.html">UUID Generator</a></li>
+            <li><a href="/tests/tool-tests.html">Automated Test Suite</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Legal & Trust</h4>
+          <ul>
+            <li><a href="/about.html">About & Mission</a></li>
+            <li><a href="/contact.html">Contact Us</a></li>
+            <li><a href="/privacy-policy.html">Privacy Policy</a></li>
+            <li><a href="/terms-of-service.html">Terms of Service</a></li>
+            <li><a href="/cookie-policy.html">Cookie Policy</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 DevForge Tools. All tools run 100% client-side. Zero telemetry.</div>
+        <div style="display: flex; gap: 1rem; align-items: center;">
+          <a href="/privacy-policy.html">Privacy</a>
+          <span>·</span>
+          <a href="/terms-of-service.html">Terms</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/core.js"></script>
+</body>
+</html>

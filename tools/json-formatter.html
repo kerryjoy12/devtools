@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSON Formatter & Validator – Fast, 100% Private Tool</title>
+  <meta name="description" content="Format, beautify, minify, and validate JSON payloads online. Free collapsible interactive tree view, key sorting, and precise syntax error line and column detection.">
+  <link rel="canonical" href="https://devforge.tools/tools/json-formatter.html">
+  <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
+  <link rel="stylesheet" href="/assets/css/styles.css">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://devforge.tools/tools/json-formatter.html">
+  <meta property="og:title" content="JSON Formatter & Validator – Fast, 100% Private Tool">
+  <meta property="og:description" content="Format, beautify, minify, and validate JSON payloads online with collapsible interactive tree view and precise error detection.">
+  <meta property="og:image" content="https://devforge.tools/assets/img/favicon.svg">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="JSON Formatter & Validator – DevForge Tools">
+  <meta name="twitter:description" content="Format, beautify, minify, and validate JSON payloads online with 100% client-side privacy.">
+  <meta name="twitter:image" content="https://devforge.tools/assets/img/favicon.svg">
+
+  <!-- Google AdSense Placeholder (Replace ca-pub-XXXXXXXXXXXXXXXX) -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "JSON Formatter & Validator",
+        "url": "https://devforge.tools/tools/json-formatter.html",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "All",
+        "description": "Format, beautify, minify, and validate JSON payloads with collapsible tree view and key sorting.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://devforge.tools/" },
+          { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://devforge.tools/#tools" },
+          { "@type": "ListItem", "position": 3, "name": "JSON Formatter", "item": "https://devforge.tools/tools/json-formatter.html" }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Why is my valid JavaScript object literal failing JSON validation?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "JSON (RFC 8259) requires all property keys to be enclosed in standard double quotes (\") and prohibits single quotes, trailing commas, and unquoted identifiers that JavaScript permits."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does the JSON formatter sort object keys deterministically?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. When you toggle the 'Sort Keys' option, all object keys are sorted lexicographically at every nested level, allowing clean diffs in git or code reviews."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does DevForge protect my private API payloads?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Processing runs entirely in your browser memory via V8/JavaScriptCore. No payload is ever sent over HTTP or stored on a server."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I format very large JSON files?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, DevForge can handle multi-megabyte JSON payloads directly in your browser. Inputs over 500KB display an optimization advisory to avoid UI stutter."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is the difference between 2 spaces, 4 spaces, and tab indentation?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "2 spaces is the modern standard for web APIs and compact readability. 4 spaces matches classical enterprise styles. Tab indentation uses literal tab characters, enabling viewer-defined tab widths."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="brand-link">
+        <svg class="w-6 h-6 text-cyan-500" viewBox="0 0 32 32" fill="none" style="width:26px;height:26px;" aria-hidden="true">
+          <rect width="32" height="32" rx="7" fill="#0f172a"/>
+          <path d="M10 11L5 16L10 21" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M22 11L27 16L22 21" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M18 9L14 23" stroke="#818cf8" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="16" cy="16" r="1.5" fill="#38bdf8"/>
+        </svg>
+        <span>DevForge Tools</span>
+      </a>
+
+      <nav class="nav-links">
+        <div class="nav-dropdown">
+          <a href="/#tools" class="nav-item active">Tools <span style="font-size: 0.65rem;">▼</span></a>
+          <div class="dropdown-menu">
+            <a href="/tools/json-formatter.html" class="dropdown-item">JSON Formatter & Validator</a>
+            <a href="/tools/html-minifier.html" class="dropdown-item">HTML Minifier</a>
+            <a href="/tools/css-beautifier.html" class="dropdown-item">CSS Beautifier & Minifier</a>
+            <a href="/tools/base64-encoder.html" class="dropdown-item">Base64 Encoder & Decoder</a>
+            <a href="/tools/url-encoder.html" class="dropdown-item">URL Encoder & Decoder</a>
+            <a href="/tools/uuid-generator.html" class="dropdown-item">UUID Generator (v4 & v7)</a>
+          </div>
+        </div>
+        <a href="/blog/" class="nav-item">Blog</a>
+        <a href="/about.html" class="nav-item">About</a>
+        <a href="/contact.html" class="nav-item">Contact</a>
+      </nav>
+
+      <div class="header-actions">
+        <a href="/#tools" class="btn btn-sm">All Tools</a>
+        <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle navigation menu" aria-expanded="false" onclick="DevForgeUI.toggleMobileMenu()">
+          <svg class="hamburger-icon" style="width:20px;height:20px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <svg class="close-icon" style="width:20px;height:20px;display:none;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding-top: 1.5rem; padding-bottom: 4rem;">
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span>/</span>
+      <a href="/#tools">Tools</a>
+      <span>/</span>
+      <span style="color: var(--text-primary); font-weight: 500;">JSON Formatter & Validator</span>
+    </nav>
+
+    <!-- Header info -->
+    <div style="margin-bottom: 1.5rem;">
+      <h1 style="font-size: 2rem; margin-bottom: 0.5rem;">JSON Formatter & Validator</h1>
+      <p style="color: var(--text-secondary); margin: 0; max-width: 800px;">
+        Format, beautify, minify, and validate JSON data online. Features interactive collapsible tree inspection, deterministic key sorting, and precise line and column syntax error detection.
+      </p>
+    </div>
+
+    <!-- Controls Strip -->
+    <div class="controls-bar">
+      <div class="control-group">
+        <label for="indent-select" style="font-size: 0.8125rem; font-weight: 500;">Indentation:</label>
+        <select id="indent-select" class="form-select" onchange="runFormat()">
+          <option value="2">2 Spaces</option>
+          <option value="4">4 Spaces</option>
+          <option value="tab">Tab</option>
+        </select>
+
+        <label style="display: flex; align-items: center; gap: 0.375rem; font-size: 0.8125rem; cursor: pointer;">
+          <input type="checkbox" id="sort-keys-checkbox" onchange="runFormat()">
+          <span>Sort Keys Alphabetically</span>
+        </label>
+      </div>
+
+      <div class="control-group">
+        <button class="btn btn-primary" onclick="runFormat()" title="Keyboard shortcut: Ctrl+Enter or Cmd+Enter">Format (Ctrl+Enter)</button>
+        <button class="btn" onclick="runMinify()">Minify</button>
+        <button class="btn" onclick="toggleViewMode()" id="view-mode-btn">Tree View</button>
+        <button class="btn" onclick="loadExample()">Load Example</button>
+        <button class="btn" onclick="clearInput()">Clear</button>
+      </div>
+    </div>
+
+    <!-- Large Input Warning -->
+    <div id="size-warning" class="status-box" style="display: none; background-color: #fffbeb; border: 1px solid #fef3c7; color: #b45309;">
+      <span>⚠️ Large payload detected (&gt;500 KB). Formatting will process efficiently in your browser without freezing the interface.</span>
+    </div>
+
+    <!-- Error/Status Alert Box -->
+    <div id="status-box" class="status-box" style="display: none;" role="alert" aria-live="polite"></div>
+
+    <!-- Two-Pane Workspace -->
+    <div class="tool-workspace">
+      <!-- Input Pane -->
+      <div class="pane" id="input-pane">
+        <div class="pane-header">
+          <div class="pane-title">
+            <span>Input JSON</span>
+            <span id="input-char-count" style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;">0 chars</span>
+          </div>
+          <div class="pane-actions">
+            <button class="btn btn-sm" onclick="pasteFromClipboard()">Paste Clipboard</button>
+            <label class="btn btn-sm" style="cursor: pointer; margin: 0;">
+              Upload File
+              <input type="file" id="file-uploader" accept=".json,.txt" style="display: none;" onchange="handleFileUpload(event)">
+            </label>
+          </div>
+        </div>
+        <div class="pane-editor">
+          <textarea id="json-input" class="code-textarea" placeholder="Paste your raw or minified JSON here, or drag & drop a .json file..." spellcheck="false"></textarea>
+        </div>
+        <div class="pane-footer">
+          <span>Tip: Drag and drop any .json file directly into the input box</span>
+          <span>Shortcut: Ctrl+Enter</span>
+        </div>
+      </div>
+
+      <!-- Output Pane -->
+      <div class="pane">
+        <div class="pane-header">
+          <div class="pane-title">
+            <span id="output-pane-title">Formatted Output</span>
+            <span id="output-stats" style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;"></span>
+          </div>
+          <div class="pane-actions">
+            <button class="btn btn-sm" onclick="swapInputOutput()" title="Swap output back to input">Swap ⇄</button>
+            <button class="btn btn-sm" onclick="copyOutput()">Copy</button>
+            <button class="btn btn-sm" onclick="downloadOutput()">Download .json</button>
+          </div>
+        </div>
+        <div class="pane-editor">
+          <textarea id="json-output" class="code-textarea" readonly placeholder="Formatted output will appear here automatically..." spellcheck="false"></textarea>
+          <div id="json-tree-container" class="tree-view" style="display: none;"></div>
+        </div>
+        <div class="pane-footer">
+          <span id="output-summary">Status: Ready</span>
+          <span>100% Client-Side</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reserved AdSlot: In-Content (Inactive until AdSense approval) -->
+    <!--
+    <div class="adsense-slot ad-leaderboard" aria-label="Advertisement Banner">
+      <ins class="adsbygoogle"
+           style="display:inline-block;width:728px;height:90px"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="9876543210"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+    -->
+
+    <!-- Deep Technical Long-Form Editorial Content (700+ Words) -->
+    <article class="content-section">
+      <h2>Comprehensive Guide: Formatting, Validating, and Debugging JSON</h2>
+      <p>
+        JavaScript Object Notation (JSON) is the universal lingua franca of modern distributed systems, REST and GraphQL APIs, document datastores like MongoDB and PostgreSQL <code>jsonb</code>, and configuration frameworks worldwide. Standardized under <a href="https://www.rfc-editor.org/rfc/rfc8259" target="_blank" rel="noopener">IETF RFC 8259</a> and <a href="https://www.ecma-international.org/publications-and-standards/standards/ecma-404/" target="_blank" rel="noopener">ECMA-404</a>, JSON specifies a lightweight, text-based data interchange format that is completely programming language independent.
+      </p>
+
+      <h3>How JSON Formatting and Validation Works Under the Hood</h3>
+      <p>
+        When you submit a text payload to the DevForge JSON Formatter, our engine executes a multi-phase parse and syntax evaluation pipeline directly in your browser:
+      </p>
+      <ol>
+        <li><strong>Character Stream Tokenization:</strong> The engine processes the character buffer, analyzing lexical tokens (string literals, numbers, boolean flags <code>true</code>/<code>false</code>, <code>null</code>, and structural delimiters <code>{</code>, <code>}</code>, <code>[</code>, <code>]</code>, <code>:</code>, and <code>,</code>).</li>
+        <li><strong>Strict Schema Parsing:</strong> Native ECMAScript parsing builds an in-memory Abstract Syntax Tree (AST). If any token violates the grammar specification, the engine halts and computes the exact zero-indexed line number and column coordinates of the syntax error.</li>
+        <li><strong>Key Canonicalization (Optional):</strong> If "Sort Keys Alphabetically" is selected, the engine recursively traverses object dictionaries, applying lexicographical key ordering to guarantee deterministic output across different environments.</li>
+        <li><strong>Indented Serialization:</strong> The structured object tree is serialized back into a formatted string using your selected indentation size (2 spaces, 4 spaces, or horizontal tab characters).</li>
+      </ol>
+
+      <h3>Step-by-Step Usage Instructions</h3>
+      <ul>
+        <li><strong>Step 1 (Input):</strong> Paste your unformatted JSON payload into the left editor pane, drag and drop a <code>.json</code> file from your desktop, or click <em>Load Example</em> to experiment with a sample payload.</li>
+        <li><strong>Step 2 (Configure):</strong> Choose your preferred indentation level (2 spaces is standard for web services; 4 spaces provides higher visual separation in documentation; tabs allow viewer-level display customizability).</li>
+        <li><strong>Step 3 (Execute):</strong> As you type, the live debounced parser automatically validates and formats the text. Alternatively, press <kbd>Ctrl+Enter</kbd> (or <kbd>Cmd+Enter</kbd> on macOS) to format on demand.</li>
+        <li><strong>Step 4 (Inspect & Export):</strong> Switch between raw formatted text and the interactive collapsible tree view by clicking <em>Tree View</em>. Copy the output with one click or download the formatted data as a clean <code>.json</code> file.</li>
+      </ul>
+
+      <h3>Real-World Examples: Before and After</h3>
+      <p>Consider an unformatted, minified API payload from a microservice response:</p>
+      <pre><code>{"service":"auth-gateway","status":200,"meta":{"region":"us-east-1","latency_ms":14.2},"payload":{"user_id":90184,"roles":["admin","editor"],"flags":{"mfa_enabled":true,"beta_tester":false}}}</code></pre>
+      <p>Formatted with 2-space indentation and alphabetical key sorting:</p>
+      <pre><code>{
+  "meta": {
+    "latency_ms": 14.2,
+    "region": "us-east-1"
+  },
+  "payload": {
+    "flags": {
+      "beta_tester": false,
+      "mfa_enabled": true
+    },
+    "roles": [
+      "admin",
+      "editor"
+    ],
+    "user_id": 90184
+  },
+  "service": "auth-gateway",
+  "status": 200
+}</code></pre>
+
+      <h3>Top 5 Common JSON Errors and Exact Solutions</h3>
+      <ol>
+        <li>
+          <strong>Trailing Commas:</strong> Unlike JavaScript objects, RFC 8259 strictly forbids trailing commas after the final element in arrays or objects (e.g., <code>{"a": 1, "b": 2,}</code>). Remove the trailing comma after the last value.
+        </li>
+        <li>
+          <strong>Single Quotes Instead of Double Quotes:</strong> In JSON, all keys and string values must be enclosed in standard ASCII double quotes (<code>"key"</code>). Single quotes (<code>'key'</code>) or backticks (<code>`key`</code>) cause immediate syntax failures.
+        </li>
+        <li>
+          <strong>Unquoted Keys:</strong> In JavaScript, <code>{ id: 101 }</code> is valid syntax, but JSON mandates quotes around keys: <code>{ "id": 101 }</code>.
+        </li>
+        <li>
+          <strong>Unescaped Control Characters:</strong> Literal newlines, carriage returns, and tabs inside strings must be escaped using standard escape sequences (<code>\n</code>, <code>\r</code>, <code>\t</code>, <code>\"</code>, <code>\\</code>).
+        </li>
+        <li>
+          <strong>Comments Inside JSON:</strong> Standard JSON does not permit <code>// single-line</code> or <code>/* multi-line */</code> comments. While JSONC (JSON with Comments) is supported in VS Code settings, standard web API parsers reject them.
+        </li>
+      </ol>
+
+      <h3>Primary Developer Use Cases</h3>
+      <ul>
+        <li><strong>API Payload Debugging:</strong> Inspecting cryptic minified responses from curl, Postman, or Chrome DevTools Network inspect panels.</li>
+        <li><strong>Configuration File Auditing:</strong> Sanitizing <code>tsconfig.json</code>, <code>package.json</code>, and Kubernetes manifest values before committing to version control.</li>
+        <li><strong>Deterministic Code Reviews:</strong> Sorting object keys alphabetically to ensure clean git diffs that avoid spurious formatting conflicts between team members.</li>
+        <li><strong>Educational Inspection:</strong> Using the interactive collapsible tree view to explore deeply nested responses from complex third-party SaaS APIs.</li>
+      </ul>
+
+      <!-- Dedicated 5-Question FAQ -->
+      <h3>Frequently Asked Questions</h3>
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+          <span>Why is my valid JavaScript object literal failing JSON validation?</span>
+          <span class="faq-icon">▼</span>
+        </button>
+        <div class="faq-answer">
+          JSON (RFC 8259) requires all property keys to be enclosed in standard double quotes (") and strictly prohibits single quotes, trailing commas, comments, and unquoted identifiers that JavaScript object syntax allows.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+          <span>Does the JSON formatter sort object keys deterministically?</span>
+          <span class="faq-icon">▼</span>
+        </button>
+        <div class="faq-answer">
+          Yes. When you toggle the 'Sort Keys' option, all object keys are sorted lexicographically at every nested level. This guarantees identical output across different runtime environments and produces clean, readable git diffs.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+          <span>How does DevForge protect my private API payloads?</span>
+          <span class="faq-icon">▼</span>
+        </button>
+        <div class="faq-answer">
+          All processing runs 100% locally in your web browser memory via native JavaScript execution. Your API tokens, client databases, and configurations are never transmitted over the internet or logged on any remote server.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+          <span>Can I format very large JSON files?</span>
+          <span class="faq-icon">▼</span>
+        </button>
+        <div class="faq-answer">
+          Yes. DevForge easily handles multi-megabyte JSON payloads directly in your browser. Inputs exceeding 500KB display an advisory notice and utilize debounced execution to keep the interface silky smooth and responsive.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+          <span>What is the difference between 2 spaces, 4 spaces, and tab indentation?</span>
+          <span class="faq-icon">▼</span>
+        </button>
+        <div class="faq-answer">
+          2 spaces is the dominant modern convention for web development and microservices, maximizing horizontal editor space. 4 spaces is common in legacy and Python-oriented projects. Tab indentation uses literal tab characters, enabling each developer to view the code at their preferred width in their local editor.
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>DevForge Tools</h4>
+          <p style="color: var(--text-muted); font-size: 0.8125rem;">100% client-side developer utilities running locally in your browser. Format, minify, and encode with complete confidentiality.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Related Tools</h4>
+          <ul>
+            <li><a href="/tools/html-minifier.html">HTML Minifier</a></li>
+            <li><a href="/tools/css-beautifier.html">CSS Beautifier & Minifier</a></li>
+            <li><a href="/tools/base64-encoder.html">Base64 Encoder & Decoder</a></li>
+            <li><a href="/tools/url-encoder.html">URL Encoder & Decoder</a></li>
+            <li><a href="/tools/uuid-generator.html">UUID Generator</a></li>
+            <li><a href="/tests/tool-tests.html">Automated Test Suite</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Related Guides</h4>
+          <ul>
+            <li><a href="/blog/what-is-json-and-how-to-fix-common-errors.html">Common JSON Errors & Fixes</a></li>
+            <li><a href="/blog/how-to-read-and-debug-api-responses-faster.html">Debugging API Responses Faster</a></li>
+            <li><a href="/blog/uuid-v4-vs-v7-which-should-you-use-for-database-keys.html">UUID v4 vs v7 for Databases</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Legal & Trust</h4>
+          <ul>
+            <li><a href="/about.html">About & Mission</a></li>
+            <li><a href="/contact.html">Contact Us</a></li>
+            <li><a href="/privacy-policy.html">Privacy Policy</a></li>
+            <li><a href="/terms-of-service.html">Terms of Service</a></li>
+            <li><a href="/cookie-policy.html">Cookie Policy</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 DevForge Tools. All tools run 100% client-side. Zero telemetry.</div>
+        <div style="display: flex; gap: 1rem; align-items: center;">
+          <a href="/privacy-policy.html">Privacy</a>
+          <span>·</span>
+          <a href="/terms-of-service.html">Terms</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="/assets/js/tools-engine.js"></script>
+  <script src="/assets/js/core.js"></script>
+  <script>
+    let isTreeView = false;
+    let debounceTimer = null;
+
+    const inputArea = document.getElementById('json-input');
+    const outputArea = document.getElementById('json-output');
+    const treeContainer = document.getElementById('json-tree-container');
+    const statusBox = document.getElementById('status-box');
+    const indentSelect = document.getElementById('indent-select');
+    const sortKeysCheckbox = document.getElementById('sort-keys-checkbox');
+    const charCount = document.getElementById('input-char-count');
+    const outputStats = document.getElementById('output-stats');
+    const sizeWarning = document.getElementById('size-warning');
+
+    // Wire drag & drop
+    DevForgeUI.wireDragAndDrop(inputArea, (text) => {
+      inputArea.value = text;
+      runFormat();
+    });
+
+    // Keyboard shortcut (Ctrl+Enter / Cmd+Enter)
+    window.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        runFormat();
+      }
+    });
+
+    // Debounced live validation
+    inputArea.addEventListener('input', () => {
+      const len = inputArea.value.length;
+      charCount.textContent = `${len.toLocaleString()} chars`;
+
+      if (len > 500000) {
+        sizeWarning.style.display = 'flex';
+      } else {
+        sizeWarning.style.display = 'none';
+      }
+
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        if (inputArea.value.trim()) {
+          runFormat(true);
+        } else {
+          outputArea.value = '';
+          statusBox.style.display = 'none';
+          outputStats.textContent = '';
+        }
+      }, len > 100000 ? 500 : 200);
+    });
+
+    function runFormat(isLive = false) {
+      const text = inputArea.value;
+      if (!text.trim()) {
+        if (!isLive) {
+          showStatus('Please paste or type JSON data into the input field.', 'error');
+        }
+        return;
+      }
+
+      const indentVal = indentSelect.value;
+      const sortKeys = sortKeysCheckbox.checked;
+
+      const validation = DevForgeTools.JSONEngine.validate(text);
+      if (!validation.valid) {
+        showStatus(`Invalid JSON at Line ${validation.error.line}, Column ${validation.error.column}: ${validation.error.message}`, 'error');
+        outputStats.textContent = 'Syntax Error';
+        return;
+      }
+
+      try {
+        const formatted = DevForgeTools.JSONEngine.format(text, indentVal, sortKeys);
+        outputArea.value = formatted;
+        showStatus('Valid JSON — successfully formatted and structured.', 'success');
+
+        const byteSize = new Blob([formatted]).size;
+        outputStats.textContent = `${byteSize.toLocaleString()} bytes · ${validation.stats.type}`;
+
+        if (isTreeView) {
+          renderTree(validation.data);
+        }
+      } catch (err) {
+        showStatus(err.message, 'error');
+      }
+    }
+
+    function runMinify() {
+      const text = inputArea.value;
+      if (!text.trim()) {
+        showStatus('Please provide JSON to minify.', 'error');
+        return;
+      }
+
+      try {
+        const minified = DevForgeTools.JSONEngine.minify(text);
+        outputArea.value = minified;
+        if (isTreeView) toggleViewMode();
+        const originalBytes = new Blob([text]).size;
+        const minifiedBytes = new Blob([minified]).size;
+        const saved = Math.max(0, originalBytes - minifiedBytes);
+        const percent = originalBytes > 0 ? ((saved / originalBytes) * 100).toFixed(1) : 0;
+        showStatus(`Minified successfully. Reduced by ${saved.toLocaleString()} bytes (${percent}% saved).`, 'success');
+        outputStats.textContent = `${minifiedBytes.toLocaleString()} bytes (minified)`;
+      } catch (err) {
+        showStatus(err.message, 'error');
+      }
+    }
+
+    function toggleViewMode() {
+      isTreeView = !isTreeView;
+      const btn = document.getElementById('view-mode-btn');
+
+      if (isTreeView) {
+        btn.textContent = 'Code View';
+        outputArea.style.display = 'none';
+        treeContainer.style.display = 'block';
+
+        const text = inputArea.value;
+        const validation = DevForgeTools.JSONEngine.validate(text);
+        if (validation.valid) {
+          renderTree(validation.data);
+        } else {
+          treeContainer.innerHTML = '<div style="color:var(--text-muted);padding:1rem;">Fix syntax errors in the input to view the interactive tree.</div>';
+        }
+      } else {
+        btn.textContent = 'Tree View';
+        outputArea.style.display = 'block';
+        treeContainer.style.display = 'none';
+      }
+    }
+
+    function renderTree(data) {
+      treeContainer.innerHTML = DevForgeTools.JSONEngine.renderTreeHtml(data);
+    }
+
+    function showStatus(message, type) {
+      statusBox.textContent = message;
+      statusBox.className = `status-box ${type}`;
+      statusBox.style.display = 'flex';
+    }
+
+    function copyOutput() {
+      DevForgeUI.copyTextToClipboard(outputArea.value, 'Formatted JSON copied to clipboard!');
+    }
+
+    function downloadOutput() {
+      DevForgeUI.downloadTextFile(outputArea.value, 'devforge-formatted.json', 'application/json');
+    }
+
+    function clearInput() {
+      inputArea.value = '';
+      outputArea.value = '';
+      treeContainer.innerHTML = '';
+      statusBox.style.display = 'none';
+      charCount.textContent = '0 chars';
+      outputStats.textContent = '';
+      sizeWarning.style.display = 'none';
+    }
+
+    function swapInputOutput() {
+      if (!outputArea.value) return;
+      inputArea.value = outputArea.value;
+      runFormat();
+    }
+
+    function pasteFromClipboard() {
+      if (navigator.clipboard && navigator.clipboard.readText) {
+        navigator.clipboard.readText().then(text => {
+          inputArea.value = text;
+          runFormat();
+        }).catch(() => {
+          DevForgeUI.showToast('Please use Ctrl+V to paste.', 'info');
+        });
+      } else {
+        DevForgeUI.showToast('Please use Ctrl+V to paste.', 'info');
+      }
+    }
+
+    function handleFileUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        inputArea.value = event.target.result;
+        runFormat();
+      };
+      reader.readAsText(file);
+    }
+
+    function loadExample() {
+      inputArea.value = JSON.stringify({
+        project: "DevForge Tools",
+        version: "2.4.0",
+        active: true,
+        maintainers: [
+          { name: "Core Engineering Team", role: "Architecture" },
+          { name: "Security Audit Group", role: "Client-Side Cryptography" }
+        ],
+        metrics: {
+          privacy_score: 100,
+          offline_capable: true,
+          supported_standards: ["RFC 8259", "RFC 4648", "RFC 3986", "RFC 9562"]
+        }
+      });
+      runFormat();
+    }
+  </script>
+</body>
+</html>

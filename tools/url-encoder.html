@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>URL Encoder & Decoder – Percent-Encoding & Query Parser</title>
+  <meta name="description" content="Encode and decode URLs and query strings online. Interactive mode selection for encodeURIComponent vs encodeURI, live query parameter table, and RFC 3986 compliance.">
+  <link rel="canonical" href="https://devforge.tools/tools/url-encoder.html">
+  <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
+  <link rel="stylesheet" href="/assets/css/styles.css">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://devforge.tools/tools/url-encoder.html">
+  <meta property="og:title" content="URL Encoder & Decoder – Percent-Encoding & Query Parser">
+  <meta property="og:description" content="Encode and decode URLs online with encodeURI vs encodeURIComponent explanations and interactive query parameter editor.">
+  <meta property="og:image" content="https://devforge.tools/assets/img/favicon.svg">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="URL Encoder & Decoder – DevForge Tools">
+  <meta name="twitter:description" content="Free, 100% private in-browser URL percent-encoder and query string inspector.">
+  <meta name="twitter:image" content="https://devforge.tools/assets/img/favicon.svg">
+
+  <!-- Google AdSense Placeholder (Replace ca-pub-XXXXXXXXXXXXXXXX) -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "URL Encoder & Decoder",
+        "url": "https://devforge.tools/tools/url-encoder.html",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "All",
+        "description": "Encode and decode URLs with encodeURI and encodeURIComponent modes and query string table editing.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://devforge.tools/" },
+          { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://devforge.tools/#tools" },
+          { "@type": "ListItem", "position": 3, "name": "URL Encoder & Decoder", "item": "https://devforge.tools/tools/url-encoder.html" }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is the critical difference between encodeURI and encodeURIComponent?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "encodeURI is meant for full web addresses and preserves protocol and path delimiters like :, /, ?, #, and &. encodeURIComponent is meant for individual query parameter values and encodes all reserved characters so they cannot break the URI structure."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why is space sometimes encoded as %20 and other times as +?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Standard RFC 3986 percent-encoding defines %20 for spaces in URLs. The plus sign (+) is a legacy convention originating from HTML form submissions (application/x-www-form-urlencoded), commonly used in search query strings."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What causes a URIError: malformed URI sequence?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "A malformed URI sequence occurs when decodeURIComponent encounters an invalid or incomplete percent-escape sequence, such as a lone % not followed by two valid hexadecimal digits, or an invalid UTF-8 multi-byte sequence."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I edit and add query string parameters interactively?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. DevForge includes a Query Parameter Table that extracts all keys and values from your URL, allowing you to edit values, add new parameters, or remove keys, and rebuilds the final URL in real time."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does DevForge log the URLs or query tokens I paste?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. All URL encoding, decoding, and parsing runs 100% locally in your browser memory. Your private API keys, bearer tokens, and internal redirect URLs are never sent to any server."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="brand-link">
+        <svg class="w-6 h-6 text-cyan-500" viewBox="0 0 32 32" fill="none" style="width:26px;height:26px;" aria-hidden="true">
+          <rect width="32" height="32" rx="7" fill="#0f172a"/>
+          <path d="M10 11L5 16L10 21" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M22 11L27 16L22 21" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M18 9L14 23" stroke="#818cf8" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="16" cy="16" r="1.5" fill="#38bdf8"/>
+        </svg>
+        <span>DevForge Tools</span>
+      </a>
+
+      <nav class="nav-links">
+        <div class="nav-dropdown">
+          <a href="/#tools" class="nav-item active">Tools <span style="font-size: 0.65rem;">▼</span></a>
+          <div class="dropdown-menu">
+            <a href="/tools/json-formatter.html" class="dropdown-item">JSON Formatter & Validator</a>
+            <a href="/tools/html-minifier.html" class="dropdown-item">HTML Minifier</a>
+            <a href="/tools/css-beautifier.html" class="dropdown-item">CSS Beautifier & Minifier</a>
+            <a href="/tools/base64-encoder.html" class="dropdown-item">Base64 Encoder & Decoder</a>
+            <a href="/tools/url-encoder.html" class="dropdown-item">URL Encoder & Decoder</a>
+            <a href="/tools/uuid-generator.html" class="dropdown-item">UUID Generator (v4 & v7)</a>
+          </div>
+        </div>
+        <a href="/blog/" class="nav-item">Blog</a>
+        <a href="/about.html" class="nav-item">About</a>
+        <a href="/contact.html" class="nav-item">Contact</a>
+      </nav>
+
+      <div class="header-actions">
+        <a href="/#tools" class="btn btn-sm">All Tools</a>
+        <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle navigation menu" aria-expanded="false" onclick="DevForgeUI.toggleMobileMenu()">
+          <svg class="hamburger-icon" style="width:20px;height:20px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <svg class="close-icon" style="width:20px;height:20px;display:none;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding-top: 1.5rem; padding-bottom: 4rem;">
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span>/</span>
+      <a href="/#tools">Tools</a>
+      <span>/</span>
+      <span style="color: var(--text-primary); font-weight: 500;">URL Encoder & Decoder</span>
+    </nav>
+
+    <!-- Header info -->
+    <div style="margin-bottom: 1.5rem;">
+      <h1 style="font-size: 2rem; margin-bottom: 0.5rem;">URL Encoder & Decoder</h1>
+      <p style="color: var(--text-secondary); margin: 0; max-width: 800px;">
+        Perform RFC 3986 percent-encoding and decoding with visual explanation of <code>encodeURIComponent</code> vs <code>encodeURI</code>. Includes an interactive query parameter table.
+      </p>
+    </div>
+
+    <!-- Mode Selector & Controls -->
+    <div class="controls-bar">
+      <div class="control-group">
+        <label for="action-select" style="font-size: 0.8125rem; font-weight: 500;">Action:</label>
+        <select id="action-select" class="form-select" onchange="runProcess()">
+          <option value="encode">Encode</option>
+          <option value="decode">Decode</option>
+        </select>
+
+        <label for="mode-select" style="font-size: 0.8125rem; font-weight: 500;">Mode:</label>
+        <select id="mode-select" class="form-select" onchange="runProcess()">
+          <option value="component">Component (encodeURIComponent - Encodes &, =, ?, /)</option>
+          <option value="full">Full URL (encodeURI - Preserves http://, ?, &)</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <button class="btn btn-primary" onclick="runProcess()">Execute (Ctrl+Enter)</button>
+        <button class="btn" onclick="loadExample()">Load Example</button>
+        <button class="btn" onclick="clearInput()">Clear</button>
+      </div>
+    </div>
+
+    <!-- Mode Explanation Card -->
+    <div id="mode-explanation" style="margin-top: 1rem; padding: 0.75rem 1rem; background-color: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 0.5rem; font-size: 0.8125rem; color: var(--text-secondary);">
+      <strong>Component Mode (Recommended for Query Values):</strong> Encodes all characters including <code>: / ? # [ ] @ ! $ & ' ( ) * + , ; =</code>. Use this when encoding individual query string parameters, user input, or redirect URLs.
+    </div>
+
+    <!-- Status Box -->
+    <div id="status-box" class="status-box" style="display: none;" role="alert" aria-live="polite"></div>
+
+    <!-- Two-Pane Workspace -->
+    <div class="tool-workspace">
+      <!-- Input Pane -->
+      <div class="pane">
+        <div class="pane-header">
+          <div class="pane-title">
+            <span id="input-title">Input</span>
+            <span id="input-count" style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;">0 chars</span>
+          </div>
+          <div class="pane-actions">
+            <button class="btn btn-sm" onclick="pasteFromClipboard()">Paste Clipboard</button>
+          </div>
+        </div>
+        <div class="pane-editor">
+          <textarea id="url-input" class="code-textarea" placeholder="Paste full URL or string to encode/decode..." spellcheck="false"></textarea>
+        </div>
+        <div class="pane-footer">
+          <span>Tip: Paste full URL to inspect query parameters in the table below</span>
+          <span>Shortcut: Ctrl+Enter</span>
+        </div>
+      </div>
+
+      <!-- Output Pane -->
+      <div class="pane">
+        <div class="pane-header">
+          <div class="pane-title">
+            <span id="output-title">Output</span>
+            <span id="output-count" style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;">0 chars</span>
+          </div>
+          <div class="pane-actions">
+            <button class="btn btn-sm" onclick="swapInputOutput()">Swap ⇄</button>
+            <button class="btn btn-sm" onclick="copyOutput()">Copy</button>
+            <button class="btn btn-sm" onclick="downloadOutput()">Download .txt</button>
+          </div>
+        </div>
+        <div class="pane-editor">
+          <textarea id="url-output" class="code-textarea" readonly placeholder="Result will appear here..." spellcheck="false"></textarea>
+        </div>
+        <div class="pane-footer">
+          <span id="process-summary">Ready</span>
+          <span>100% Client-Side</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Query String Table -->
+    <section id="query-table-section" style="margin: 2rem 0; background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 0.75rem; padding: 1.5rem;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+        <div>
+          <h3 style="font-size: 1.125rem; margin-bottom: 0.25rem;">Interactive Query String Inspector</h3>
+          <p style="font-size: 0.8125rem; color: var(--text-muted); margin: 0;">Add, edit, or delete parameters and watch the output URL update live.</p>
+        </div>
+        <button class="btn btn-sm btn-primary" onclick="addQueryRow()">+ Add Parameter</button>
+      </div>
+
+      <div style="overflow-x: auto;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th style="width: 35%;">Parameter Key</th>
+              <th>Decoded Value</th>
+              <th style="width: 80px; text-align: center;">Action</th>
+            </tr>
+          </thead>
+          <tbody id="query-table-body">
+            <tr>
+              <td colspan="3" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">Paste a URL with query parameters (e.g. <code>?id=101&search=test</code>) above to view and edit keys.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Deep Technical Content (700+ Words) -->
+    <article class="content-section">
+      <h2>Comprehensive Guide to URL Encoding and URI Specification</h2>
+      <p>
+        Uniform Resource Identifiers (URIs) and Uniform Resource Locators (URLs) are the structural backbone of the World Wide Web. Standardized under <a href="https://www.rfc-editor.org/rfc/rfc3986" target="_blank" rel="noopener">IETF RFC 3986</a>, the URI syntax defines how data is formatted and addressed across network boundaries.
+      </p>
+
+      <h3>What is Percent-Encoding and Why Is It Necessary?</h3>
+      <p>
+        URLs are strictly restricted to a finite subset of 7-bit US-ASCII characters. Furthermore, within this ASCII character set, characters are partitioned into two strict categories:
+      </p>
+      <ul>
+        <li>
+          <strong>Unreserved Characters (Never Encoded):</strong> <code>A</code>–<code>Z</code>, <code>a</code>–<code>z</code>, <code>0</code>–<code>9</code>, hyphen (<code>-</code>), underscore (<code>_</code>), period (<code>.</code>), and tilde (<code>~</code>). These characters have no structural meaning and require no escaping.
+        </li>
+        <li>
+          <strong>Reserved Characters (Syntactic Delimiters):</strong> <code>:</code>, <code>/</code>, <code>?</code>, <code>#</code>, <code>[</code>, <code>]</code>, <code>@</code>, <code>!</code>, <code>$</code>, <code>&</code>, <code>'</code>, <code>(</code>, <code>)</code>, <code>*</code>, <code>+</code>, <code>,</code>, <code>;</code>, and <code>=</code>. These characters serve as delimiters between URI schemes, hosts, paths, queries, and fragments.
+        </li>
+      </ul>
+      <p>
+        When you need to transmit data that happens to contain one of these reserved characters (for example, searching for <code>"C++ & Python"</code> in a query parameter), the character must be translated into its <strong>percent-encoded hexadecimal representation</strong>: a percent sign (<code>%</code>) followed by the two-digit hexadecimal code representing the byte in UTF-8. For example, a space becomes <code>%20</code>, an ampersand becomes <code>%26</code>, and a plus sign becomes <code>%2B</code>.
+      </p>
+
+      <h3><code>encodeURI</code> vs. <code>encodeURIComponent</code>: The Critical Difference</h3>
+      <p>
+        One of the most persistent bugs in web applications stems from confusing JavaScript's two native encoding functions:
+      </p>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0;">
+        <div style="background-color: var(--bg-tertiary); padding: 1rem; border-radius: 0.5rem; border: 1px solid var(--border-color);">
+          <h4 style="margin-top:0;">encodeURI(fullUrl)</h4>
+          <p style="font-size: 0.8125rem;">
+            Designed for encoding an entire complete URL address. It intentionally preserves <code>:</code>, <code>/</code>, <code>?</code>, and <code>&</code> so the overall URL structure remains valid.
+          </p>
+          <pre><code>// Preserves protocol and query delimiters:
+encodeURI("https://api.com/v1/search?q=hello world");
+// -> "https://api.com/v1/search?q=hello%20world"</code></pre>
+        </div>
+        <div style="background-color: var(--bg-tertiary); padding: 1rem; border-radius: 0.5rem; border: 1px solid var(--border-color);">
+          <h4 style="margin-top:0;">encodeURIComponent(paramValue)</h4>
+          <p style="font-size: 0.8125rem;">
+            Designed for encoding an individual parameter value. It encodes <strong>all</strong> reserved characters (including <code>&</code>, <code>=</code>, and <code>/</code>) so user data cannot break the query string.
+          </p>
+          <pre><code>// Encodes & and = into safe values:
+encodeURIComponent("alpha&beta=gamma");
+// -> "alpha%26beta%3Dgamma"</code></pre>
+        </div>
+      </div>
+
+      <h3>Why <code>+</code> vs <code>%20</code> Matters in Query Strings</h3>
+      <p>
+        Developers frequently ask whether spaces should be encoded as <code>%20</code> or <code>+</code>. The distinction is historical:
+      </p>
+      <blockquote>
+        Under RFC 3986, the official percent-encoding for a space character is <code>%20</code>. However, the older HTML 4 / 5 Form specification for <code>application/x-www-form-urlencoded</code> payloads mapped spaces to the plus sign (<code>+</code>). In modern web services, passing <code>%20</code> is always safe in both path segments and query strings, whereas <code>+</code> in a URL path is interpreted as a literal plus sign!
+      </blockquote>
+
+      <h3>Step-by-Step Usage Guide</h3>
+      <ul>
+        <li><strong>Step 1:</strong> Select <em>Encode</em> or <em>Decode</em> from the Action dropdown.</li>
+        <li><strong>Step 2:</strong> Choose the encoding scope: <em>Component Mode</em> (for query values, redirect URLs, or tokens) or <em>Full URL Mode</em> (for entire HTTP addresses).</li>
+        <li><strong>Step 3:</strong> Paste your URL into the input pane. The interactive Query Parameter Inspector automatically extracts keys and values into an editable table.</li>
+        <li><strong>Step 4:</strong> Modify keys or values directly in the table, add new parameters, or click <em>Copy</em> to grab the reconstructed URL.</li>
+      </ul>
+
+      <h3>Frequently Asked Questions</h3>
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+          <span>What is the critical difference between encodeURI and encodeURIComponent?</span>
+          <span class="faq-icon">▼</span>
+        </button>
+        <div class="faq-answer">
+          encodeURI is meant for full web addresses and preserves protocol and path delimiters like :, /, ?, #, and &. encodeURIComponent is meant for individual query parameter values and encodes all reserved characters so they cannot break the URI structure.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+          <span>Why is space sometimes encoded as %20 and other times as +?</span>
+          <span class="faq-icon">▼</span>
+        </button>
+        <div class="faq-answer">
+          Standard RFC 3986 percent-encoding defines %20 for spaces in URLs. The plus sign (+) is a legacy convention originating from HTML form submissions (application/x-www-form-urlencoded), commonly used in search query strings.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+          <span>What causes a URIError: malformed URI sequence?</span>
+          <span class="faq-icon">▼</span>
+        </button>
+        <div class="faq-answer">
+          A malformed URI sequence occurs when decodeURIComponent encounters an invalid or incomplete percent-escape sequence, such as a lone % not followed by two valid hexadecimal digits, or an invalid UTF-8 multi-byte sequence.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+          <span>Can I edit and add query string parameters interactively?</span>
+          <span class="faq-icon">▼</span>
+        </button>
+        <div class="faq-answer">
+          Yes. DevForge includes a Query Parameter Table that extracts all keys and values from your URL, allowing you to edit values, add new parameters, or remove keys, and rebuilds the final URL in real time.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+          <span>Does DevForge log the URLs or query tokens I paste?</span>
+          <span class="faq-icon">▼</span>
+        </button>
+        <div class="faq-answer">
+          No. All URL encoding, decoding, and parsing runs 100% locally in your browser memory. Your private API keys, bearer tokens, and internal redirect URLs are never sent to any server.
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>DevForge Tools</h4>
+          <p style="color: var(--text-muted); font-size: 0.8125rem;">100% client-side developer utilities running locally in your browser. Format, minify, and encode with complete confidentiality.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Related Tools</h4>
+          <ul>
+            <li><a href="/tools/base64-encoder.html">Base64 Encoder & Decoder</a></li>
+            <li><a href="/tools/json-formatter.html">JSON Formatter & Validator</a></li>
+            <li><a href="/tools/uuid-generator.html">UUID Generator</a></li>
+            <li><a href="/tools/html-minifier.html">HTML Minifier</a></li>
+            <li><a href="/tools/css-beautifier.html">CSS Beautifier</a></li>
+            <li><a href="/tests/tool-tests.html">Automated Test Suite</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Related Guides</h4>
+          <ul>
+            <li><a href="/blog/encodeuri-vs-encodeuricomponent-the-difference-that-breaks-urls.html">encodeURI vs encodeURIComponent</a></li>
+            <li><a href="/blog/base64-encoding-explained-what-it-is-and-when-to-use-it.html">Base64 Encoding Explained</a></li>
+            <li><a href="/blog/how-to-read-and-debug-api-responses-faster.html">Debugging API Responses Faster</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Legal & Trust</h4>
+          <ul>
+            <li><a href="/about.html">About & Mission</a></li>
+            <li><a href="/contact.html">Contact Us</a></li>
+            <li><a href="/privacy-policy.html">Privacy Policy</a></li>
+            <li><a href="/terms-of-service.html">Terms of Service</a></li>
+            <li><a href="/cookie-policy.html">Cookie Policy</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 DevForge Tools. All tools run 100% client-side. Zero telemetry.</div>
+        <div style="display: flex; gap: 1rem; align-items: center;">
+          <a href="/privacy-policy.html">Privacy</a>
+          <span>·</span>
+          <a href="/terms-of-service.html">Terms</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/tools-engine.js"></script>
+  <script src="/assets/js/core.js"></script>
+  <script>
+    let debounceTimer = null;
+    let currentParsedParams = [];
+    let currentBaseUrl = '';
+
+    const inputArea = document.getElementById('url-input');
+    const outputArea = document.getElementById('url-output');
+    const actionSelect = document.getElementById('action-select');
+    const modeSelect = document.getElementById('mode-select');
+    const statusBox = document.getElementById('status-box');
+    const inputCount = document.getElementById('input-count');
+    const outputCount = document.getElementById('output-count');
+    const modeExplanation = document.getElementById('mode-explanation');
+    const tableBody = document.getElementById('query-table-body');
+    const summarySpan = document.getElementById('process-summary');
+
+    DevForgeUI.wireDragAndDrop(inputArea, (text) => {
+      inputArea.value = text;
+      runProcess();
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        runProcess();
+      }
+    });
+
+    inputArea.addEventListener('input', () => {
+      const len = inputArea.value.length;
+      inputCount.textContent = `${len.toLocaleString()} chars`;
+
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        if (inputArea.value.trim()) {
+          runProcess(true);
+        } else {
+          outputArea.value = '';
+          outputCount.textContent = '0 chars';
+          statusBox.style.display = 'none';
+          renderTable([]);
+        }
+      }, 200);
+    });
+
+    function runProcess(isLive = false) {
+      const raw = inputArea.value;
+      if (!raw.trim()) {
+        if (!isLive) statusBox.style.display = 'none';
+        return;
+      }
+
+      const action = actionSelect.value;
+      const mode = modeSelect.value;
+
+      if (mode === 'component') {
+        modeExplanation.innerHTML = '<strong>Component Mode (encodeURIComponent):</strong> Encodes all reserved characters including <code>: / ? # & =</code>. Ideal for individual query parameter values.';
+      } else {
+        modeExplanation.innerHTML = '<strong>Full URL Mode (encodeURI):</strong> Preserves URL structure characters (<code>http://</code>, <code>?</code>, <code>&</code>, <code>/</code>). Ideal for entire web addresses.';
+      }
+
+      if (action === 'encode') {
+        const encoded = DevForgeTools.URLEngine.encode(raw, mode);
+        outputArea.value = encoded;
+        outputCount.textContent = `${encoded.length.toLocaleString()} chars`;
+        showStatus('URL encoded successfully.', 'success');
+        summarySpan.textContent = 'Encoded';
+      } else {
+        try {
+          const decoded = DevForgeTools.URLEngine.decode(raw, mode);
+          outputArea.value = decoded;
+          outputCount.textContent = `${decoded.length.toLocaleString()} chars`;
+          showStatus('URL decoded successfully.', 'success');
+          summarySpan.textContent = 'Decoded';
+        } catch (err) {
+          showStatus(err.message, 'error');
+          outputCount.textContent = 'Error';
+          summarySpan.textContent = 'Failed';
+        }
+      }
+
+      // Update query table
+      const parsed = DevForgeTools.URLEngine.parseQuery(raw);
+      currentBaseUrl = parsed.baseUrl;
+      currentParsedParams = parsed.params;
+      renderTable(parsed.params);
+    }
+
+    function renderTable(params) {
+      if (!params || params.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">No query parameters detected in input.</td></tr>`;
+        return;
+      }
+
+      tableBody.innerHTML = params.map((p, idx) => `
+        <tr>
+          <td><input type="text" class="form-input" style="width: 100%; font-family: monospace;" value="${DevForgeUI.escapeHtml(p.key)}" oninput="updateParamKey(${idx}, this.value)" /></td>
+          <td><input type="text" class="form-input" style="width: 100%; font-family: monospace;" value="${DevForgeUI.escapeHtml(p.value)}" oninput="updateParamVal(${idx}, this.value)" /></td>
+          <td style="text-align: center;"><button class="btn btn-sm" onclick="removeParam(${idx})" style="color: #ef4444;">Delete</button></td>
+        </tr>
+      `).join('');
+    }
+
+    function updateParamKey(index, newKey) {
+      if (currentParsedParams[index]) {
+        currentParsedParams[index].key = newKey;
+        rebuildFromTable();
+      }
+    }
+
+    function updateParamVal(index, newVal) {
+      if (currentParsedParams[index]) {
+        currentParsedParams[index].value = newVal;
+        rebuildFromTable();
+      }
+    }
+
+    function removeParam(index) {
+      currentParsedParams.splice(index, 1);
+      renderTable(currentParsedParams);
+      rebuildFromTable();
+    }
+
+    function addQueryRow() {
+      currentParsedParams.push({ key: 'new_param', value: 'value' });
+      renderTable(currentParsedParams);
+      rebuildFromTable();
+    }
+
+    function rebuildFromTable() {
+      const rebuilt = DevForgeTools.URLEngine.buildUrl(currentBaseUrl, currentParsedParams);
+      outputArea.value = rebuilt;
+      outputCount.textContent = `${rebuilt.length.toLocaleString()} chars`;
+    }
+
+    function showStatus(msg, type) {
+      statusBox.textContent = msg;
+      statusBox.className = `status-box ${type}`;
+      statusBox.style.display = 'flex';
+    }
+
+    function copyOutput() {
+      DevForgeUI.copyTextToClipboard(outputArea.value, 'Result copied to clipboard!');
+    }
+
+    function downloadOutput() {
+      DevForgeUI.downloadTextFile(outputArea.value, 'devforge-url.txt', 'text/plain;charset=utf-8');
+    }
+
+    function clearInput() {
+      inputArea.value = '';
+      outputArea.value = '';
+      inputCount.textContent = '0 chars';
+      outputCount.textContent = '0 chars';
+      statusBox.style.display = 'none';
+      renderTable([]);
+      summarySpan.textContent = 'Ready';
+    }
+
+    function swapInputOutput() {
+      if (!outputArea.value) return;
+      inputArea.value = outputArea.value;
+      actionSelect.value = actionSelect.value === 'encode' ? 'decode' : 'encode';
+      runProcess();
+    }
+
+    function pasteFromClipboard() {
+      if (navigator.clipboard && navigator.clipboard.readText) {
+        navigator.clipboard.readText().then(text => {
+          inputArea.value = text;
+          runProcess();
+        }).catch(() => DevForgeUI.showToast('Please use Ctrl+V to paste.', 'info'));
+      } else {
+        DevForgeUI.showToast('Please use Ctrl+V to paste.', 'info');
+      }
+    }
+
+    function loadExample() {
+      actionSelect.value = 'encode';
+      modeSelect.value = 'full';
+      inputArea.value = 'https://api.devforge.tools/v2/search?category=developer tools&filter=RFC 3986 & 4648&page=1&sort=date desc';
+      runProcess();
+    }
+  </script>
+</body>
+</html>

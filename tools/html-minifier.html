@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML Minifier – Fast, 100% Private HTML Compressor</title>
+  <meta name="description" content="Minify and compress HTML markup online. Strip comments, collapse whitespace, and reduce page payload while strictly preserving pre, textarea, script, and style blocks.">
+  <link rel="canonical" href="https://devforge.tools/tools/html-minifier.html">
+  <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
+  <link rel="stylesheet" href="/assets/css/styles.css">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://devforge.tools/tools/html-minifier.html">
+  <meta property="og:title" content="HTML Minifier – Fast, 100% Private HTML Compressor">
+  <meta property="og:description" content="Minify and compress HTML markup online. Strip comments and collapse whitespace while strictly preserving pre, textarea, script, and style tags.">
+  <meta property="og:image" content="https://devforge.tools/assets/img/favicon.svg">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="HTML Minifier – DevForge Tools">
+  <meta name="twitter:description" content="Free, 100% private in-browser HTML compressor and minifier.">
+  <meta name="twitter:image" content="https://devforge.tools/assets/img/favicon.svg">
+
+  <!-- Google AdSense Placeholder (Replace ca-pub-XXXXXXXXXXXXXXXX) -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "HTML Minifier",
+        "url": "https://devforge.tools/tools/html-minifier.html",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "All",
+        "description": "Compress and minify HTML markup locally with safe pre and script block preservation.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://devforge.tools/" },
+          { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://devforge.tools/#tools" },
+          { "@type": "ListItem", "position": 3, "name": "HTML Minifier", "item": "https://devforge.tools/tools/html-minifier.html" }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Does HTML minification break inline JavaScript or CSS?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. DevForge uses a non-destructive block-protection algorithm that tokenizes and preserves exact content inside script and style tags before performing whitespace collapsing."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why is whitespace preservation inside pre and textarea critical?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "In HTML, pre and textarea elements preserve literal spaces, tabs, and newlines by specification. Stripping spaces inside these tags would corrupt code snippets and user input formatting."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does HTML minification improve Core Web Vitals?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Smaller initial HTML documents reduce Time to First Byte (TTFB), accelerate DOM tree construction, and speed up First Contentful Paint (FCP) and Largest Contentful Paint (LCP)."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Should I remove optional closing tags in HTML5?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The HTML5 specification allows omitting certain closing tags like li, p, and tr because the parser implicitly closes them when encountering sibling elements. However, keeping them is recommended for XML/XHTML tool compatibility."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does Gzip or Brotli replace HTML minification?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Compression algorithms work synergistically with minification. Minifying removes redundant tokens and comments completely, enabling Gzip and Brotli dictionaries to achieve higher compression ratios on the remaining content."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="brand-link">
+        <svg class="w-6 h-6 text-cyan-500" viewBox="0 0 32 32" fill="none" style="width:26px;height:26px;" aria-hidden="true">
+          <rect width="32" height="32" rx="7" fill="#0f172a"/>
+          <path d="M10 11L5 16L10 21" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M22 11L27 16L22 21" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M18 9L14 23" stroke="#818cf8" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="16" cy="16" r="1.5" fill="#38bdf8"/>
+        </svg>
+        <span>DevForge Tools</span>
+      </a>
+
+      <nav class="nav-links">
+        <div class="nav-dropdown">
+          <a href="/#tools" class="nav-item active">Tools <span style="font-size: 0.65rem;">▼</span></a>
+          <div class="dropdown-menu">
+            <a href="/tools/json-formatter.html" class="dropdown-item">JSON Formatter & Validator</a>
+            <a href="/tools/html-minifier.html" class="dropdown-item">HTML Minifier</a>
+            <a href="/tools/css-beautifier.html" class="dropdown-item">CSS Beautifier & Minifier</a>
+            <a href="/tools/base64-encoder.html" class="dropdown-item">Base64 Encoder & Decoder</a>
+            <a href="/tools/url-encoder.html" class="dropdown-item">URL Encoder & Decoder</a>
+            <a href="/tools/uuid-generator.html" class="dropdown-item">UUID Generator (v4 & v7)</a>
+          </div>
+        </div>
+        <a href="/blog/" class="nav-item">Blog</a>
+        <a href="/about.html" class="nav-item">About</a>
+        <a href="/contact.html" class="nav-item">Contact</a>
+      </nav>
+
+      <div class="header-actions">
+        <a href="/#tools" class="btn btn-sm">All Tools</a>
+        <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle navigation menu" aria-expanded="false" onclick="DevForgeUI.toggleMobileMenu()">
+          <svg class="hamburger-icon" style="width:20px;height:20px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <svg class="close-icon" style="width:20px;height:20px;display:none;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding-top: 1.5rem; padding-bottom: 4rem;">
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span>/</span>
+      <a href="/#tools">Tools</a>
+      <span>/</span>
+      <span style="color: var(--text-primary); font-weight: 500;">HTML Minifier</span>
+    </nav>
+
+    <!-- Header info -->
+    <div style="margin-bottom: 1.5rem;">
+      <h1 style="font-size: 2rem; margin-bottom: 0.5rem;">HTML Minifier</h1>
+      <p style="color: var(--text-secondary); margin: 0; max-width: 800px;">
+        Compress HTML markup, strip unneeded comments, and eliminate whitespace while strictly preserving literal code inside &lt;pre&gt;, &lt;textarea&gt;, &lt;script&gt;, and &lt;style&gt; blocks.
+      </p>
+    </div>
+
+    <!-- Controls Strip -->
+    <div class="controls-bar">
+      <div class="control-group">
+        <label style="display: flex; align-items: center; gap: 0.375rem; font-size: 0.8125rem; cursor: pointer;">
+          <input type="checkbox" id="opt-comments" checked onchange="runMinify()">
+          <span>Remove Comments</span>
+        </label>
+        <label style="display: flex; align-items: center; gap: 0.375rem; font-size: 0.8125rem; cursor: pointer;">
+          <input type="checkbox" id="opt-whitespace" checked onchange="runMinify()">
+          <span>Collapse Whitespace</span>
+        </label>
+        <label style="display: flex; align-items: center; gap: 0.375rem; font-size: 0.8125rem; cursor: pointer;">
+          <input type="checkbox" id="opt-optional-tags" onchange="runMinify()">
+          <span>Remove Optional Tags</span>
+        </label>
+        <label style="display: flex; align-items: center; gap: 0.375rem; font-size: 0.8125rem; cursor: pointer;">
+          <input type="checkbox" id="opt-quotes" onchange="runMinify()">
+          <span>Remove Safe Quotes</span>
+        </label>
+      </div>
+
+      <div class="control-group">
+        <button class="btn btn-primary" onclick="runMinify()">Minify (Ctrl+Enter)</button>
+        <button class="btn" onclick="loadExample()">Load Example</button>
+        <button class="btn" onclick="clearInput()">Clear</button>
+      </div>
+    </div>
+
+    <!-- Status / Stats Box -->
+    <div id="stats-banner" class="status-box success" style="display: none;">
+      <div id="stats-text" style="font-weight: 500;"></div>
+    </div>
+
+    <!-- Two-Pane Workspace -->
+    <div class="tool-workspace">
+      <!-- Input Pane -->
+      <div class="pane">
+        <div class="pane-header">
+          <div class="pane-title">
+            <span>Input HTML</span>
+            <span id="input-bytes" style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;">0 bytes</span>
+          </div>
+          <div class="pane-actions">
+            <button class="btn btn-sm" onclick="pasteFromClipboard()">Paste Clipboard</button>
+            <label class="btn btn-sm" style="cursor: pointer; margin: 0;">
+              Upload File
+              <input type="file" id="file-uploader" accept=".html,.htm,.txt" style="display: none;" onchange="handleFileUpload(event)">
+            </label>
+          </div>
+        </div>
+        <div class="pane-editor">
+          <textarea id="html-input" class="code-textarea" placeholder="Paste your raw HTML document or markup fragment here, or drag & drop an .html file..." spellcheck="false"></textarea>
+        </div>
+        <div class="pane-footer">
+          <span>Tip: Content in &lt;pre&gt; and &lt;textarea&gt; is strictly preserved</span>
+          <span>Shortcut: Ctrl+Enter</span>
+        </div>
+      </div>
+
+      <!-- Output Pane -->
+      <div class="pane">
+        <div class="pane-header">
+          <div class="pane-title">
+            <span>Minified Output</span>
+            <span id="output-bytes" style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;">0 bytes</span>
+          </div>
+          <div class="pane-actions">
+            <button class="btn btn-sm" onclick="swapInputOutput()">Swap ⇄</button>
+            <button class="btn btn-sm" onclick="copyOutput()">Copy</button>
+            <button class="btn btn-sm" onclick="downloadOutput()">Download .html</button>
+          </div>
+        </div>
+        <div class="pane-editor">
+          <textarea id="html-output" class="code-textarea" readonly placeholder="Minified HTML output will appear here..." spellcheck="false"></textarea>
+        </div>
+        <div class="pane-footer">
+          <span id="compression-ratio">Ready to compress</span>
+          <span>100% Client-Side</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Deep Technical Content (700+ Words) -->
+    <article class="content-section">
+      <h2>The Engineering Mechanics of HTML Minification</h2>
+      <p>
+        In modern web development, every byte transmitted over TCP and HTTP connections directly dictates initial load latency, First Contentful Paint (FCP), and Core Web Vitals metrics. HTML minification is the discipline of removing syntactically superfluous characters from an HTML document—including indentation spaces, carriage returns, inline documentation comments, and optional closing tags—without altering the browser's parsed Document Object Model (DOM) or visual rendering.
+      </p>
+
+      <h3>How Our Non-Destructive Protection Pipeline Operates</h3>
+      <p>
+        Naïve HTML minifiers using simple global regular expressions often catastrophically corrupt websites by collapsing spaces inside code blocks or breaking JavaScript statements. DevForge utilizes a bulletproof <strong>Two-Phase Token Isolation Pipeline</strong>:
+      </p>
+      <ol>
+        <li>
+          <strong>Block Isolation Phase:</strong> Before any text transformation occurs, our engine parses the document for sensitive elements whose internal whitespace is semantically critical:
+          <ul>
+            <li><code>&lt;pre&gt;...&lt;/pre&gt;</code>: Preformatted blocks where exact indentation, code alignments, and newlines must be preserved.</li>
+            <li><code>&lt;textarea&gt;...&lt;/textarea&gt;</code>: User input form controls where whitespace represents literal initial values.</li>
+            <li><code>&lt;script&gt;...&lt;/script&gt;</code>: Inline JavaScript where stripping line breaks without semicolons could cause syntax errors.</li>
+            <li><code>&lt;style&gt;...&lt;/style&gt;</code>: Inline CSS styles requiring isolated syntax protection.</li>
+          </ul>
+          Each detected block is extracted and swapped with a unique, cryptographically random placeholder token.
+        </li>
+        <li>
+          <strong>Whitespace and Comment Stripping Phase:</strong> With sensitive blocks safely quarantined, the remaining markup undergoes whitespace normalization. Multi-line whitespace runs are collapsed into single spaces, redundant whitespace between closing and opening tags (e.g. <code>&gt; &lt;</code>) is streamlined, and non-conditional HTML comments (<code>&lt;!-- ... --&gt;</code>) are excised completely.
+        </li>
+        <li>
+          <strong>Token Re-injection:</strong> The preserved blocks are restored back into their exact original positions with their critical internal contents intact.
+        </li>
+      </ol>
+
+      <h3>Step-by-Step Usage Guide</h3>
+      <ul>
+        <li><strong>Step 1:</strong> Paste your HTML source code into the left pane, click <em>Upload File</em> to select a <code>.html</code> file from your disk, or drag and drop a file directly into the input window.</li>
+        <li><strong>Step 2:</strong> Configure minification options. By default, <em>Remove Comments</em> and <em>Collapse Whitespace</em> are active for safe, production-grade minification.</li>
+        <li><strong>Step 3:</strong> Review the real-time compression metrics banner indicating exact bytes saved and percentage reduction.</li>
+        <li><strong>Step 4:</strong> Click <em>Copy</em> to copy the minified markup to your clipboard, or click <em>Download .html</em> to save the compressed file for deployment.</li>
+      </ul>
+
+      <h3>Real-World Code Example: Before and After</h3>
+      <p>Unminified HTML template with comments, indentation, and preformatted code:</p>
+      <pre><code>&lt;!-- Main Application Container --&gt;
+&lt;div class="hero-section" id="overview"&gt;
+    &lt;h1 class="title"&gt;High-Speed Developer Platform&lt;/h1&gt;
+    &lt;p&gt;
+        Deploy your applications with zero friction.
+    &lt;/p&gt;
+    &lt;pre&gt;
+        const config = {
+            timeout: 5000,
+            retries: 3
+        };
+    &lt;/pre&gt;
+&lt;/div&gt;</code></pre>
+      <p>Minified result with code indentation safely preserved:</p>
+      <pre><code>&lt;div class="hero-section" id="overview"&gt; &lt;h1 class="title"&gt;High-Speed Developer Platform&lt;/h1&gt; &lt;p&gt;Deploy your applications with zero friction.&lt;/p&gt; &lt;pre&gt;
+        const config = {
+            timeout: 5000,
+            retries: 3
+        };
+    &lt;/pre&gt; &lt;/div&gt;</code></pre>
+
+      <h3>HTML Minification vs. Gzip and Brotli Compression</h3>
+      <p>
+        A frequent misconception among developers is that modern HTTP transfer compression algorithms like Gzip or Brotli render HTML minification obsolete. In reality, the two techniques work synergistically:
+      </p>
+      <blockquote>
+        Transfer compression algorithms identify recurring character patterns and replace them with short pointer dictionary references. Minification permanently removes tokens that should never exist in the payload to begin with. When you feed minified HTML to Brotli, the compressor does not waste precious dictionary slots on blank spaces and unread comments, resulting in an additional 5% to 15% reduction in overall wire transfer size.
+      </blockquote>
+
+      <h3>Key Production Benefits</h3>
+      <ul>
+        <li><strong>Faster Time to Interactive (TTI):</strong> Less raw HTML to parse reduces browser tokenization time and CPU consumption on resource-constrained mobile devices.</li>
+        <li><strong>Bandwidth Cost Reductions:</strong> On high-traffic websites serving millions of requests per day, saving 2KB to 8KB per HTML document translates to terabytes of bandwidth savings monthly.</li>
+        <li><strong>Cleaner Production Deployments:</strong> Eliminates internal development comments, staging notes, and developer reminders from being inadvertently exposed to the public web.</li>
+      </ul>
+
+      <h3>Frequently Asked Questions</h3>
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+          <span>Does HTML minification break inline JavaScript or CSS?</span>
+          <span class="faq-icon">▼</span>
+        </button>
+        <div class="faq-answer">
+          No. DevForge uses a non-destructive block-protection algorithm that tokenizes and preserves exact content inside script and style tags before performing whitespace collapsing, preventing corrupted code statements.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+          <span>Why is whitespace preservation inside pre and textarea critical?</span>
+          <span class="faq-icon">▼</span>
+        </button>
+        <div class="faq-answer">
+          In HTML, pre and textarea elements preserve literal spaces, tabs, and newlines by specification. Stripping spaces inside these tags would corrupt code snippets and user input formatting.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+          <span>How does HTML minification improve Core Web Vitals?</span>
+          <span class="faq-icon">▼</span>
+        </button>
+        <div class="faq-answer">
+          Smaller initial HTML documents reduce Time to First Byte (TTFB), accelerate DOM tree construction, and speed up First Contentful Paint (FCP) and Largest Contentful Paint (LCP).
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+          <span>Should I remove optional closing tags in HTML5?</span>
+          <span class="faq-icon">▼</span>
+        </button>
+        <div class="faq-answer">
+          The HTML5 specification allows omitting certain closing tags like li, p, and tr because the parser implicitly closes them when encountering sibling elements. However, keeping them is recommended for XML/XHTML tool compatibility.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+          <span>Does Gzip or Brotli replace HTML minification?</span>
+          <span class="faq-icon">▼</span>
+        </button>
+        <div class="faq-answer">
+          No. Compression algorithms work synergistically with minification. Minifying removes redundant tokens and comments completely, enabling Gzip and Brotli dictionaries to achieve higher compression ratios on the remaining content.
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>DevForge Tools</h4>
+          <p style="color: var(--text-muted); font-size: 0.8125rem;">100% client-side developer utilities running locally in your browser. Format, minify, and encode with complete confidentiality.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Related Tools</h4>
+          <ul>
+            <li><a href="/tools/json-formatter.html">JSON Formatter & Validator</a></li>
+            <li><a href="/tools/css-beautifier.html">CSS Beautifier & Minifier</a></li>
+            <li><a href="/tools/base64-encoder.html">Base64 Encoder & Decoder</a></li>
+            <li><a href="/tools/url-encoder.html">URL Encoder & Decoder</a></li>
+            <li><a href="/tools/uuid-generator.html">UUID Generator</a></li>
+            <li><a href="/tests/tool-tests.html">Automated Test Suite</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Related Guides</h4>
+          <ul>
+            <li><a href="/blog/why-minify-html-and-css-real-impact-on-page-speed.html">Why Minify HTML & CSS?</a></li>
+            <li><a href="/blog/css-formatting-best-practices-for-maintainable-stylesheets.html">CSS Formatting Best Practices</a></li>
+            <li><a href="/blog/what-is-json-and-how-to-fix-common-errors.html">Common JSON Errors & Fixes</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Legal & Trust</h4>
+          <ul>
+            <li><a href="/about.html">About & Mission</a></li>
+            <li><a href="/contact.html">Contact Us</a></li>
+            <li><a href="/privacy-policy.html">Privacy Policy</a></li>
+            <li><a href="/terms-of-service.html">Terms of Service</a></li>
+            <li><a href="/cookie-policy.html">Cookie Policy</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 DevForge Tools. All tools run 100% client-side. Zero telemetry.</div>
+        <div style="display: flex; gap: 1rem; align-items: center;">
+          <a href="/privacy-policy.html">Privacy</a>
+          <span>·</span>
+          <a href="/terms-of-service.html">Terms</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/tools-engine.js"></script>
+  <script src="/assets/js/core.js"></script>
+  <script>
+    let debounceTimer = null;
+    const inputArea = document.getElementById('html-input');
+    const outputArea = document.getElementById('html-output');
+    const inputBytes = document.getElementById('input-bytes');
+    const outputBytes = document.getElementById('output-bytes');
+    const statsBanner = document.getElementById('stats-banner');
+    const statsText = document.getElementById('stats-text');
+    const compressionRatio = document.getElementById('compression-ratio');
+
+    DevForgeUI.wireDragAndDrop(inputArea, (text) => {
+      inputArea.value = text;
+      runMinify();
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        runMinify();
+      }
+    });
+
+    inputArea.addEventListener('input', () => {
+      const bytes = new Blob([inputArea.value]).size;
+      inputBytes.textContent = `${bytes.toLocaleString()} bytes`;
+
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        if (inputArea.value.trim()) {
+          runMinify();
+        } else {
+          outputArea.value = '';
+          outputBytes.textContent = '0 bytes';
+          statsBanner.style.display = 'none';
+          compressionRatio.textContent = 'Ready to compress';
+        }
+      }, bytes > 100000 ? 500 : 200);
+    });
+
+    function runMinify() {
+      const raw = inputArea.value;
+      if (!raw.trim()) return;
+
+      const opts = {
+        removeComments: document.getElementById('opt-comments').checked,
+        collapseWhitespace: document.getElementById('opt-whitespace').checked,
+        removeOptionalTags: document.getElementById('opt-optional-tags').checked,
+        removeQuotes: document.getElementById('opt-quotes').checked,
+        preservePres: true
+      };
+
+      const result = DevForgeTools.HTMLMinifierEngine.minify(raw, opts);
+      outputArea.value = result.minified;
+
+      inputBytes.textContent = `${result.originalSize.toLocaleString()} bytes`;
+      outputBytes.textContent = `${result.minifiedSize.toLocaleString()} bytes`;
+
+      compressionRatio.textContent = `${result.percentSaved}% saved (${result.savedBytes.toLocaleString()} bytes)`;
+      statsText.textContent = `Compression Complete: Reduced from ${result.originalSize.toLocaleString()} to ${result.minifiedSize.toLocaleString()} bytes (${result.percentSaved}% size reduction).`;
+      statsBanner.style.display = 'flex';
+    }
+
+    function copyOutput() {
+      DevForgeUI.copyTextToClipboard(outputArea.value, 'Minified HTML copied to clipboard!');
+    }
+
+    function downloadOutput() {
+      DevForgeUI.downloadTextFile(outputArea.value, 'devforge-minified.html', 'text/html');
+    }
+
+    function clearInput() {
+      inputArea.value = '';
+      outputArea.value = '';
+      inputBytes.textContent = '0 bytes';
+      outputBytes.textContent = '0 bytes';
+      statsBanner.style.display = 'none';
+      compressionRatio.textContent = 'Ready to compress';
+    }
+
+    function swapInputOutput() {
+      if (!outputArea.value) return;
+      inputArea.value = outputArea.value;
+      runMinify();
+    }
+
+    function pasteFromClipboard() {
+      if (navigator.clipboard && navigator.clipboard.readText) {
+        navigator.clipboard.readText().then(text => {
+          inputArea.value = text;
+          runMinify();
+        }).catch(() => DevForgeUI.showToast('Please use Ctrl+V to paste.', 'info'));
+      } else {
+        DevForgeUI.showToast('Please use Ctrl+V to paste.', 'info');
+      }
+    }
+
+    function handleFileUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        inputArea.value = event.target.result;
+        runMinify();
+      };
+      reader.readAsText(file);
+    }
+
+    function loadExample() {
+      inputArea.value = `<!DOCTYPE html>
+<!-- Production Web Page Sample -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>High Performance Developer Platform</title>
+    <style>
+        .hero { display: flex; align-items: center; justify-content: space-between; }
+        .hero h1 { font-size: 2.5rem; color: #0284c7; }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <!-- Main Hero Header -->
+        <div class="hero">
+            <h1>Welcome to DevForge</h1>
+            <p>
+                100% private in-browser developer utilities with zero network telemetry.
+            </p>
+        </div>
+
+        <section class="code-example">
+            <h2>Source Code Preservation Test</h2>
+            <pre>
+function initializeSecurity() {
+    console.log("Client-side only: no telemetry sent");
+    return true;
+}
+            </pre>
+        </section>
+    </main>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            console.log("App ready");
+        });
+    <\/script>
+</body>
+</html>`;
+      runMinify();
+    }
+  </script>
+</body>
+</html>

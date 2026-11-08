@@ -1,0 +1,6 @@
+{
+  "name": "DevForge Tools",
+  "description": "Free, private, fast online developer tools running 100% in your browser. Format JSON, minify HTML & CSS, encode Base64, parse URLs, and generate UUIDs.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

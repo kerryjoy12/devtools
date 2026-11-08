@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cookie Policy – DevForge Tools</title>
+  <meta name="description" content="DevForge Tools cookie policy. Detailed breakdown of strictly necessary, functional preference, and advertising cookies, plus instructions on how to manage your privacy.">
+  <link rel="canonical" href="https://devforge.tools/cookie-policy.html">
+  <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
+  <link rel="stylesheet" href="/assets/css/styles.css">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://devforge.tools/cookie-policy.html">
+  <meta property="og:title" content="Cookie Policy – DevForge Tools">
+  <meta property="og:description" content="Detailed breakdown of cookies, local storage governance, and ad privacy controls.">
+  <meta property="og:image" content="https://devforge.tools/assets/img/favicon.svg">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="brand-link">
+        <svg class="w-6 h-6 text-cyan-500" viewBox="0 0 32 32" fill="none" style="width:26px;height:26px;" aria-hidden="true">
+          <rect width="32" height="32" rx="7" fill="#0f172a"/>
+          <path d="M10 11L5 16L10 21" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M22 11L27 16L22 21" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M18 9L14 23" stroke="#818cf8" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="16" cy="16" r="1.5" fill="#38bdf8"/>
+        </svg>
+        <span>DevForge Tools</span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="/" class="nav-item">Home</a>
+        <div class="nav-dropdown">
+          <a href="/#tools" class="nav-item">Tools <span style="font-size: 0.65rem;">▼</span></a>
+          <div class="dropdown-menu">
+            <a href="/tools/json-formatter.html" class="dropdown-item">JSON Formatter & Validator</a>
+            <a href="/tools/html-minifier.html" class="dropdown-item">HTML Minifier</a>
+            <a href="/tools/css-beautifier.html" class="dropdown-item">CSS Beautifier & Minifier</a>
+            <a href="/tools/base64-encoder.html" class="dropdown-item">Base64 Encoder & Decoder</a>
+            <a href="/tools/url-encoder.html" class="dropdown-item">URL Encoder & Decoder</a>
+            <a href="/tools/uuid-generator.html" class="dropdown-item">UUID Generator (v4 & v7)</a>
+          </div>
+        </div>
+        <a href="/blog/" class="nav-item">Blog</a>
+        <a href="/about.html" class="nav-item">About</a>
+        <a href="/contact.html" class="nav-item">Contact</a>
+      </nav>
+
+      <div class="header-actions">
+        <a href="/#tools" class="btn btn-sm">All Tools</a>
+          <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle navigation menu" aria-expanded="false" onclick="DevForgeUI.toggleMobileMenu()">
+            <svg class="hamburger-icon" style="width:20px;height:20px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            <svg class="close-icon" style="width:20px;height:20px;display:none;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding-top: 2rem; padding-bottom: 5rem;">
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span>/</span>
+      <span style="color: var(--text-primary); font-weight: 500;">Cookie Policy</span>
+    </nav>
+
+    <article class="content-section">
+      <h1 style="font-size: 2.25rem; margin-bottom: 0.5rem;">Cookie & Local Storage Policy</h1>
+      <div style="font-size: 0.8125rem; color: var(--text-muted); margin-bottom: 2rem;">
+        Last Updated: March 5, 2026
+      </div>
+
+      <p>
+        This Cookie Policy explains what cookies and local storage mechanisms are, how DevForge Tools utilizes them, and how you can manage your preferences.
+      </p>
+
+      <h2>1. What Are Cookies and Local Storage?</h2>
+      <p>
+        A cookie is a small text file placed on your computer or mobile device when you visit a website. Local storage (HTML5 <code>localStorage</code>) is a modern web standard that allows web applications to store key-value data directly in your browser without transmitting it with every HTTP request.
+      </p>
+      <p>
+        <strong>Crucial Privacy Assurance:</strong> DevForge Tools never stores your code, JSON payloads, passwords, or developer tokens in cookies or local storage. All tool execution happens in transient memory.
+      </p>
+
+      <h2>2. Categories of Storage We Use</h2>
+
+      <table class="data-table" style="margin: 1.5rem 0;">
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Purpose</th>
+            <th>Required?</th>
+            <th>Storage Mechanism</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Strictly Necessary</strong></td>
+            <td>Fundamental site navigation, DDoS mitigation, and remembering your cookie consent choices.</td>
+            <td style="color:#10b981;">Yes</td>
+            <td>HTTP Cookies / Local Storage</td>
+          </tr>
+          <tr>
+            <td><strong>Functional & Preferences</strong></td>
+            <td>Remembering whether you prefer dark mode or light mode, and your default code indentation width.</td>
+            <td style="color:#ef4444;">No (Optional)</td>
+            <td><code>localStorage</code> (Written only with user consent)</td>
+          </tr>
+          <tr>
+            <td><strong>Marketing & AdSense</strong></td>
+            <td>Delivering non-intrusive advertisements via Google AdSense and third-party ad networks to fund free access.</td>
+            <td style="color:#ef4444;">No (Optional)</td>
+            <td>Third-Party Cookies (DoubleClick DART)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>3. Third-Party Advertising Cookies (Google AdSense)</h2>
+      <p>
+        Google, as a third-party vendor, uses cookies to serve ads on DevForge Tools:
+      </p>
+      <ul>
+        <li>Google's use of advertising cookies enables it and its partners to serve ads based on your visit to this site and other sites on the web.</li>
+        <li>You may opt out of personalized advertising by visiting <a href="https://adssettings.google.com/" target="_blank" rel="noopener">Google Ads Settings</a>.</li>
+        <li>You can also opt out of participating third-party vendor cookies by visiting the <a href="https://optout.networkadvertising.org/" target="_blank" rel="noopener">Network Advertising Initiative Opt-Out Page</a> or <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener">AboutAds.info</a>.</li>
+      </ul>
+
+      <h2>4. How to Manage Your Preferences</h2>
+      <p>
+        You can adjust your cookie and storage preferences on DevForge Tools at any time:
+      </p>
+      <div style="margin: 1.5rem 0;">
+        <button class="btn btn-primary" onclick="document.getElementById('cookie-manage-modal').style.display='flex'">Open Cookie Preference Center</button>
+      </div>
+
+      <p>
+        Additionally, you can configure your browser to block or delete cookies entirely:
+      </p>
+      <ul>
+        <li><strong>Google Chrome:</strong> Settings → Privacy and Security → Third-party cookies</li>
+        <li><strong>Mozilla Firefox:</strong> Settings → Privacy & Security → Enhanced Tracking Protection</li>
+        <li><strong>Apple Safari:</strong> Settings → Privacy → Block all cookies</li>
+        <li><strong>Microsoft Edge:</strong> Settings → Cookies and site permissions</li>
+      </ul>
+    </article>
+  </main>
+
+  <!-- Preferences Modal -->
+  <div id="cookie-manage-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm items-center justify-center p-4" style="display: none;">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl max-w-md w-full p-6">
+      <h3 style="font-size: 1.125rem; font-weight: 700; margin-bottom: 0.5rem;">Cookie & Storage Preferences</h3>
+      <p style="font-size: 0.8125rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
+        Customize how cookies and local storage are utilized on DevForge Tools.
+      </p>
+
+      <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem;">
+        <label style="display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.8125rem;">
+          <input type="checkbox" checked disabled style="margin-top: 0.2rem;" />
+          <div>
+            <strong>Strictly Necessary (Required)</strong>
+            <div style="color: var(--text-muted); font-size: 0.75rem;">Required for routing, security, and basic accessibility.</div>
+          </div>
+        </label>
+
+        <label style="display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.8125rem;">
+          <input type="checkbox" id="consent-preferences" checked style="margin-top: 0.2rem;" />
+          <div>
+            <strong>Functional & Preferences</strong>
+            <div style="color: var(--text-muted); font-size: 0.75rem;">Remembers your indentation width and dark/light theme choices in localStorage.</div>
+          </div>
+        </label>
+
+        <label style="display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.8125rem;">
+          <input type="checkbox" id="consent-marketing" style="margin-top: 0.2rem;" />
+          <div>
+            <strong>Marketing & Ad Personalization</strong>
+            <div style="color: var(--text-muted); font-size: 0.75rem;">Allows Google AdSense to serve personalized ads according to Google policy.</div>
+          </div>
+        </label>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
+        <button class="btn btn-sm" onclick="document.getElementById('cookie-manage-modal').style.display='none'">Cancel</button>
+        <button class="btn btn-sm btn-primary" onclick="
+          DevForgeUI.saveCookieConsent({
+            essential: true,
+            preferences: document.getElementById('consent-preferences').checked,
+            analytics: false,
+            marketing: document.getElementById('consent-marketing').checked
+          });
+          DevForgeUI.showToast('Preferences updated successfully!', 'success');
+        ">Save Preferences</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>DevForge Tools</h4>
+          <p style="color: var(--text-muted); font-size: 0.8125rem;">100% client-side developer utilities running locally in your browser. Format, minify, and encode with complete confidentiality.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Developer Tools</h4>
+          <ul>
+            <li><a href="/tools/json-formatter.html">JSON Formatter & Validator</a></li>
+            <li><a href="/tools/html-minifier.html">HTML Minifier</a></li>
+            <li><a href="/tools/css-beautifier.html">CSS Beautifier & Minifier</a></li>
+            <li><a href="/tools/base64-encoder.html">Base64 Encoder & Decoder</a></li>
+            <li><a href="/tools/url-encoder.html">URL Encoder & Decoder</a></li>
+            <li><a href="/tools/uuid-generator.html">UUID Generator</a></li>
+            <li><a href="/tests/tool-tests.html">Automated Test Suite</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Legal & Trust</h4>
+          <ul>
+            <li><a href="/about.html">About & Mission</a></li>
+            <li><a href="/contact.html">Contact Us</a></li>
+            <li><a href="/privacy-policy.html">Privacy Policy</a></li>
+            <li><a href="/terms-of-service.html">Terms of Service</a></li>
+            <li><a href="/cookie-policy.html">Cookie Policy</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 DevForge Tools. All tools run 100% client-side. Zero telemetry.</div>
+        <div style="display: flex; gap: 1rem; align-items: center;">
+          <a href="/privacy-policy.html">Privacy</a>
+          <span>·</span>
+          <a href="/terms-of-service.html">Terms</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/core.js"></script>
+</body>
+</html>

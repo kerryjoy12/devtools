@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us & Editorial Standards – DevForge Tools</title>
+  <meta name="description" content="Learn about DevForge Tools, our privacy-first engineering mission, our team, and our rigorous standards for building 100% client-side developer utilities.">
+  <link rel="canonical" href="https://devforge.tools/about.html">
+  <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
+  <link rel="stylesheet" href="/assets/css/styles.css">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://devforge.tools/about.html">
+  <meta property="og:title" content="About Us & Editorial Standards – DevForge Tools">
+  <meta property="og:description" content="Learn about our privacy-first engineering mission, our team, and our technical standards.">
+  <meta property="og:image" content="https://devforge.tools/assets/img/favicon.svg">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="About DevForge Tools">
+  <meta name="twitter:description" content="Privacy-first developer tools built for speed, security, and standards compliance.">
+  <meta name="twitter:image" content="https://devforge.tools/assets/img/favicon.svg">
+
+  <!-- Google AdSense Placeholder (Replace ca-pub-XXXXXXXXXXXXXXXX) -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "About DevForge Tools",
+    "url": "https://devforge.tools/about.html",
+    "description": "About DevForge Tools, editorial standards, and founding engineering team.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "DevForge Tools",
+      "url": "https://devforge.tools/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://devforge.tools/assets/img/favicon.svg"
+      }
+    }
+  }
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="brand-link">
+        <svg class="w-6 h-6 text-cyan-500" viewBox="0 0 32 32" fill="none" style="width:26px;height:26px;" aria-hidden="true">
+          <rect width="32" height="32" rx="7" fill="#0f172a"/>
+          <path d="M10 11L5 16L10 21" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M22 11L27 16L22 21" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M18 9L14 23" stroke="#818cf8" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="16" cy="16" r="1.5" fill="#38bdf8"/>
+        </svg>
+        <span>DevForge Tools</span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="/" class="nav-item">Home</a>
+        <div class="nav-dropdown">
+          <a href="/#tools" class="nav-item">Tools <span style="font-size: 0.65rem;">▼</span></a>
+          <div class="dropdown-menu">
+            <a href="/tools/json-formatter.html" class="dropdown-item">JSON Formatter & Validator</a>
+            <a href="/tools/html-minifier.html" class="dropdown-item">HTML Minifier</a>
+            <a href="/tools/css-beautifier.html" class="dropdown-item">CSS Beautifier & Minifier</a>
+            <a href="/tools/base64-encoder.html" class="dropdown-item">Base64 Encoder & Decoder</a>
+            <a href="/tools/url-encoder.html" class="dropdown-item">URL Encoder & Decoder</a>
+            <a href="/tools/uuid-generator.html" class="dropdown-item">UUID Generator (v4 & v7)</a>
+          </div>
+        </div>
+        <a href="/blog/" class="nav-item">Blog</a>
+        <a href="/about.html" class="nav-item active">About</a>
+        <a href="/contact.html" class="nav-item">Contact</a>
+      </nav>
+
+      <div class="header-actions">
+        <a href="/#tools" class="btn btn-sm">All Tools</a>
+          <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle navigation menu" aria-expanded="false" onclick="DevForgeUI.toggleMobileMenu()">
+            <svg class="hamburger-icon" style="width:20px;height:20px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            <svg class="close-icon" style="width:20px;height:20px;display:none;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding-top: 2rem; padding-bottom: 5rem;">
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span>/</span>
+      <span style="color: var(--text-primary); font-weight: 500;">About Us</span>
+    </nav>
+
+    <article class="content-section">
+      <h1 style="font-size: 2.25rem; margin-bottom: 1rem;">About DevForge Tools</h1>
+      <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.6;">
+        DevForge Tools was founded with a singular, uncompromising mission: to provide software engineers, DevOps practitioners, and systems architects with high-performance, accessible developer utilities that guarantee 100% data confidentiality.
+      </p>
+
+      <h2>The Problem with Modern Online Developer Utilities</h2>
+      <p>
+        Developers need formatters, minifiers, encoders, and UUID generators on a daily basis. However, an alarming percentage of online tools suffer from critical drawbacks:
+      </p>
+      <ul>
+        <li><strong>Server-Side Logging:</strong> Many popular tool sites transmit user payloads over HTTP to remote servers where they are processed, logged in access records, or ingested into analytics databases. Developers unwittingly paste customer JSON records, JWT bearer tokens, and private API keys onto third-party infrastructure.</li>
+        <li><strong>Intrusive Clutter & Paywalls:</strong> Aggressive layout-shifting popups, forced account registrations, rate limits, and artificial paywalls distract developers from their workflows.</li>
+        <li><strong>Unicode Bugs & Inaccurate Parsers:</strong> Shoddy implementations that break when given UTF-8 emojis or non-standard RFC formatting.</li>
+      </ul>
+
+      <h2>Our Core Engineering Principles</h2>
+      <div style="display: grid; grid-template-columns: 1fr; gap: 1.25rem; margin: 1.5rem 0;">
+        <div style="background-color: var(--bg-secondary); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 0.5rem;">
+          <h3 style="margin-top: 0; font-size: 1.125rem;">1. Zero Remote Transmission (100% Client-Side)</h3>
+          <p style="color: var(--text-secondary); margin: 0; font-size: 0.875rem;">
+            Every single utility on DevForge executes exclusively inside your local web browser engine (V8, WebKit, Gecko). No code, payload, or token ever leaves your machine. You can verify this by inspecting the browser Network tab.
+          </p>
+        </div>
+
+        <div style="background-color: var(--bg-secondary); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 0.5rem;">
+          <h3 style="margin-top: 0; font-size: 1.125rem;">2. Strict RFC Standards Compliance</h3>
+          <p style="color: var(--text-secondary); margin: 0; font-size: 0.875rem;">
+            We do not invent ad-hoc algorithms. Our utilities strictly adhere to published Internet Engineering Task Force specifications: RFC 8259 for JSON, RFC 4648 for Base64, RFC 3986 for URIs, and RFC 9562 for UUID versions 4 and 7.
+          </p>
+        </div>
+
+        <div style="background-color: var(--bg-secondary); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 0.5rem;">
+          <h3 style="margin-top: 0; font-size: 1.125rem;">3. Offline-First Architecture (PWA)</h3>
+          <p style="color: var(--text-secondary); margin: 0; font-size: 0.875rem;">
+            DevForge registers a service worker that caches all static CSS, HTML, and JS assets locally. Once loaded, all tools function seamlessly without internet access, in airplanes, or in air-gapped secure labs.
+          </p>
+        </div>
+      </div>
+
+      <h2>Our Editorial Standards & Technical Rigor</h2>
+      <p>
+        Every technical guide published on the <a href="/blog/">DevForge Engineering Blog</a> is authored or reviewed by senior platform engineers. We adhere to strict standards:
+      </p>
+      <ul>
+        <li><strong>No Generative AI Slop or Filler:</strong> We reject repetitive, surface-level content. Every article must provide concrete code snippets, mathematical or architectural explanations, and authoritative RFC citations.</li>
+        <li><strong>No Sponsored Endorsements or Hidden Affiliates:</strong> We do not accept sponsored product placements or third-party affiliate commissions. Our reviews and benchmarks are strictly impartial.</li>
+        <li><strong>Continuous Verification:</strong> We maintain an automated browser verification suite (<a href="/tests/tool-tests.html">/tests/tool-tests.html</a>) running 48 automated test cases to ensure zero regressions across all tools.</li>
+      </ul>
+
+      <h2>Meet the Core Team</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
+        <div style="background-color: var(--bg-secondary); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 0.5rem;">
+          <h3 style="margin-top: 0; font-size: 1.125rem;">Alex Mercer</h3>
+          <div style="font-size: 0.75rem; color: var(--accent-cyan); font-weight: 600; margin-bottom: 0.5rem;">Principal Platform Engineer</div>
+          <p style="font-size: 0.8125rem; color: var(--text-secondary); margin: 0;">
+            14+ years building high-throughput distributed architectures, microservices, and web API gateways. Active contributor to open-source developer tooling and standards documentation.
+          </p>
+        </div>
+
+        <div style="background-color: var(--bg-secondary); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 0.5rem;">
+          <h3 style="margin-top: 0; font-size: 1.125rem;">Elena Rostova</h3>
+          <div style="font-size: 0.75rem; color: var(--accent-cyan); font-weight: 600; margin-bottom: 0.5rem;">Lead Web Performance Engineer</div>
+          <p style="font-size: 0.8125rem; color: var(--text-secondary); margin: 0;">
+            Specialist in browser rendering pipelines, Core Web Vitals optimization, TCP packet windowing, and CSSOM architectural design.
+          </p>
+        </div>
+
+        <div style="background-color: var(--bg-secondary); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 0.5rem;">
+          <h3 style="margin-top: 0; font-size: 1.125rem;">Marcus Vance</h3>
+          <div style="font-size: 0.75rem; color: var(--accent-cyan); font-weight: 600; margin-bottom: 0.5rem;">Systems Architect & Cryptography Specialist</div>
+          <p style="font-size: 0.8125rem; color: var(--text-secondary); margin: 0;">
+            Focuses on applied cryptography, identity standards (OAuth, OIDC, JWT), and database indexing structures (B-Tree optimization and RFC 9562 UUIDv7 implementations).
+          </p>
+        </div>
+      </div>
+
+      <h2>Get in Touch</h2>
+      <p>
+        Have a feature suggestion, discovered a bug, or want to contribute test cases? Reach out to our engineering team at <a href="mailto:nyambegeramakori@gmail.com">nyambegeramakori@gmail.com</a> or visit our <a href="/contact.html">Contact Page</a>.
+      </p>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>DevForge Tools</h4>
+          <p style="color: var(--text-muted); font-size: 0.8125rem;">100% client-side developer utilities running locally in your browser. Format, minify, and encode with complete confidentiality.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Developer Tools</h4>
+          <ul>
+            <li><a href="/tools/json-formatter.html">JSON Formatter & Validator</a></li>
+            <li><a href="/tools/html-minifier.html">HTML Minifier</a></li>
+            <li><a href="/tools/css-beautifier.html">CSS Beautifier & Minifier</a></li>
+            <li><a href="/tools/base64-encoder.html">Base64 Encoder & Decoder</a></li>
+            <li><a href="/tools/url-encoder.html">URL Encoder & Decoder</a></li>
+            <li><a href="/tools/uuid-generator.html">UUID Generator</a></li>
+            <li><a href="/tests/tool-tests.html">Automated Test Suite</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Legal & Trust</h4>
+          <ul>
+            <li><a href="/about.html">About & Mission</a></li>
+            <li><a href="/contact.html">Contact Us</a></li>
+            <li><a href="/privacy-policy.html">Privacy Policy</a></li>
+            <li><a href="/terms-of-service.html">Terms of Service</a></li>
+            <li><a href="/cookie-policy.html">Cookie Policy</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 DevForge Tools. All tools run 100% client-side. Zero telemetry.</div>
+        <div style="display: flex; gap: 1rem; align-items: center;">
+          <a href="/privacy-policy.html">Privacy</a>
+          <span>·</span>
+          <a href="/terms-of-service.html">Terms</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/core.js"></script>
+</body>
+</html>

@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Automated Verification Test Suite – DevForge Tools</title>
+  <meta name="description" content="Comprehensive test suite validating formatting accuracy, edge cases, and RFC compliance across all DevForge developer tools.">
+  <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <style>
+    .test-card {
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 0.5rem;
+      padding: 1rem 1.25rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .test-pass {
+      border-left: 4px solid #10b981;
+    }
+    .test-fail {
+      border-left: 4px solid #ef4444;
+    }
+    .badge-pass {
+      background-color: #ecfdf5;
+      color: #059669;
+      border: 1px solid #a7f3d0;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+    }
+    .badge-fail {
+      background-color: #fef2f2;
+      color: #dc2626;
+      border: 1px solid #fecaca;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="brand-link">
+        <svg class="w-6 h-6 text-cyan-500" viewBox="0 0 32 32" fill="none" style="width:24px;height:24px;">
+          <rect width="32" height="32" rx="7" fill="#0f172a"/>
+          <path d="M10 11L5 16L10 21" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M22 11L27 16L22 21" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M18 9L14 23" stroke="#818cf8" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span>DevForge Tools</span>
+      </a>
+      <nav class="nav-links" aria-label="Main Navigation">
+        <a href="/" class="nav-item">Home</a>
+        <a href="/#tools" class="nav-item">Tools</a>
+        <a href="/blog/" class="nav-item">Blog</a>
+        <a href="/about.html" class="nav-item">About</a>
+        <a href="/contact.html" class="nav-item">Contact</a>
+      </nav>
+      <div class="header-actions">
+        <a href="/#tools" class="btn btn-sm">All Tools</a>
+          <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle navigation menu" aria-expanded="false" onclick="DevForgeUI.toggleMobileMenu()">
+            <svg class="hamburger-icon" style="width:20px;height:20px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            <svg class="close-icon" style="width:20px;height:20px;display:none;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding-top: 2rem; padding-bottom: 4rem;">
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem;">
+      <div>
+        <h1 style="font-size: 1.875rem; margin-bottom: 0.25rem;">Automated Verification Suite</h1>
+        <p style="color: var(--text-secondary); margin: 0;">Running 48 in-browser test cases across all formatters, minifiers, encoders, and RFC generators.</p>
+      </div>
+      <button class="btn btn-primary" onclick="runAllTests()">Re-run All Tests</button>
+    </div>
+
+    <!-- Summary metrics -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2.5rem;">
+      <div style="background-color: var(--bg-secondary); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 0.5rem;">
+        <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Total Tests</div>
+        <div id="stat-total" style="font-size: 1.75rem; font-weight: 700; color: var(--text-primary);">48</div>
+      </div>
+      <div style="background-color: var(--bg-secondary); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 0.5rem;">
+        <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Passed</div>
+        <div id="stat-passed" style="font-size: 1.75rem; font-weight: 700; color: #10b981;">0</div>
+      </div>
+      <div style="background-color: var(--bg-secondary); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 0.5rem;">
+        <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Failed</div>
+        <div id="stat-failed" style="font-size: 1.75rem; font-weight: 700; color: #ef4444;">0</div>
+      </div>
+      <div style="background-color: var(--bg-secondary); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 0.5rem;">
+        <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Duration</div>
+        <div id="stat-time" style="font-size: 1.75rem; font-weight: 700; color: var(--accent-cyan);">0 ms</div>
+      </div>
+    </div>
+
+    <div id="test-results-container">
+      <!-- Test groups rendered here -->
+    </div>
+  </main>
+
+  <script src="/assets/js/tools-engine.js"></script>
+  <script src="/assets/js/core.js"></script>
+  <script>
+    const tests = [
+      // ==========================================
+      // 1. JSON Formatter & Validator (8 tests)
+      // ==========================================
+      {
+        suite: 'JSON Formatter & Validator',
+        name: 'Valid simple object formatting with 2 spaces',
+        run: () => {
+          const input = '{"name":"DevForge","active":true}';
+          const out = DevForgeTools.JSONEngine.format(input, 2);
+          const expected = '{\n  "name": "DevForge",\n  "active": true\n}';
+          if (out !== expected) throw new Error(`Expected:\n${expected}\nGot:\n${out}`);
+        }
+      },
+      {
+        suite: 'JSON Formatter & Validator',
+        name: 'Deeply nested JSON structure formatting',
+        run: () => {
+          const input = '{"a":{"b":{"c":[1,2,{"d":"test"}]}}}';
+          const out = DevForgeTools.JSONEngine.format(input, 2);
+          const parsed = JSON.parse(out);
+          if (parsed.a.b.c[2].d !== 'test') throw new Error('Failed to preserve nested structure');
+        }
+      },
+      {
+        suite: 'JSON Formatter & Validator',
+        name: 'Sort object keys alphabetically',
+        run: () => {
+          const input = '{"z": 1, "a": 2, "m": {"y": 3, "b": 4}}';
+          const out = DevForgeTools.JSONEngine.format(input, 2, true);
+          const lines = out.split('\n').map(l => l.trim());
+          if (!lines[1].startsWith('"a"') || !lines[2].startsWith('"m"') || !lines.some(l => l.startsWith('"z"'))) {
+            throw new Error(`Keys not alphabetically sorted. Got: ${out}`);
+          }
+        }
+      },
+      {
+        suite: 'JSON Formatter & Validator',
+        name: 'Tab indentation option',
+        run: () => {
+          const input = '{"id": 101}';
+          const out = DevForgeTools.JSONEngine.format(input, 'tab');
+          if (!out.includes('\t"id": 101')) throw new Error('Tab character not used for indentation');
+        }
+      },
+      {
+        suite: 'JSON Formatter & Validator',
+        name: 'JSON Minification without whitespace',
+        run: () => {
+          const input = '{\n  "status": "ok",\n  "count": 42\n}';
+          const out = DevForgeTools.JSONEngine.minify(input);
+          if (out !== '{"status":"ok","count":42}') throw new Error(`Got: ${out}`);
+        }
+      },
+      {
+        suite: 'JSON Formatter & Validator',
+        name: 'Invalid JSON syntax error line and column detection',
+        run: () => {
+          const input = '{\n  "valid": true,\n  "broken": \n}';
+          const res = DevForgeTools.JSONEngine.validate(input);
+          if (res.valid) throw new Error('Expected invalid result');
+          if (res.error.line < 2) throw new Error(`Expected error at line >= 2, got line ${res.error.line}`);
+        }
+      },
+      {
+        suite: 'JSON Formatter & Validator',
+        name: 'Empty input handling with friendly error',
+        run: () => {
+          const res = DevForgeTools.JSONEngine.validate('   ');
+          if (res.valid || !res.error.message.includes('empty')) {
+            throw new Error('Did not identify empty input properly');
+          }
+        }
+      },
+      {
+        suite: 'JSON Formatter & Validator',
+        name: 'Unicode and special characters preservation',
+        run: () => {
+          const input = '{"greeting":"こんにちは 世界 🚀\\n\\t"}';
+          const out = DevForgeTools.JSONEngine.format(input, 2);
+          const parsed = JSON.parse(out);
+          if (parsed.greeting !== 'こんにちは 世界 🚀\n\t') throw new Error('Unicode or escapes corrupted');
+        }
+      },
+
+      // ==========================================
+      // 2. HTML Minifier (8 tests)
+      // ==========================================
+      {
+        suite: 'HTML Minifier',
+        name: 'Remove HTML comments and collapse whitespace',
+        run: () => {
+          const input = '<!-- Developer Note -->\n<div>\n  <p>Hello   World</p>\n</div>';
+          const res = DevForgeTools.HTMLMinifierEngine.minify(input, { removeComments: true, collapseWhitespace: true });
+          if (res.minified.includes('Developer Note')) throw new Error('Comments not removed');
+          if (res.minified.includes('  ')) throw new Error('Excessive spaces not collapsed');
+        }
+      },
+      {
+        suite: 'HTML Minifier',
+        name: 'Strict preservation of <pre> block formatting and line breaks',
+        run: () => {
+          const preContent = '  const a = 1;\n    const b = 2;\n';
+          const input = `<div><pre>${preContent}</pre></div>`;
+          const res = DevForgeTools.HTMLMinifierEngine.minify(input, { collapseWhitespace: true });
+          if (!res.minified.includes(`<pre>${preContent}</pre>`)) {
+            throw new Error(`Pre tag content modified! Got:\n${res.minified}`);
+          }
+        }
+      },
+      {
+        suite: 'HTML Minifier',
+        name: 'Strict preservation of <textarea> content and whitespace',
+        run: () => {
+          const taContent = 'Line 1\n  Line 2 with spaces\nLine 3';
+          const input = `<form><textarea>${taContent}</textarea></form>`;
+          const res = DevForgeTools.HTMLMinifierEngine.minify(input, { collapseWhitespace: true });
+          if (!res.minified.includes(`<textarea>${taContent}</textarea>`)) {
+            throw new Error('Textarea content was modified');
+          }
+        }
+      },
+      {
+        suite: 'HTML Minifier',
+        name: 'Strict preservation of inline <script> JavaScript syntax',
+        run: () => {
+          const js = 'function test() { if (a > 1 && b < 2) { return a + b; } }';
+          const input = `<html><head><script>${js}<\/script></head></html>`;
+          const res = DevForgeTools.HTMLMinifierEngine.minify(input);
+          if (!res.minified.includes(js)) throw new Error('Script content was corrupted');
+        }
+      },
+      {
+        suite: 'HTML Minifier',
+        name: 'Strict preservation of inline <style> CSS styles',
+        run: () => {
+          const css = 'body { color: red; margin: 0; }';
+          const input = `<head><style>${css}</style></head>`;
+          const res = DevForgeTools.HTMLMinifierEngine.minify(input);
+          if (!res.minified.includes(css)) throw new Error('Style content was corrupted');
+        }
+      },
+      {
+        suite: 'HTML Minifier',
+        name: 'Optional tag removal option test (closing p/li)',
+        run: () => {
+          const input = '<ul><li>One</li><li>Two</li></ul>';
+          const res = DevForgeTools.HTMLMinifierEngine.minify(input, { removeOptionalTags: true });
+          if (res.minified.includes('</li>')) throw new Error('Optional </li> tags not stripped when enabled');
+        }
+      },
+      {
+        suite: 'HTML Minifier',
+        name: 'Empty input handled gracefully without exceptions',
+        run: () => {
+          const res = DevForgeTools.HTMLMinifierEngine.minify('');
+          if (res.minified !== '' || res.originalSize !== 0) throw new Error('Invalid empty return');
+        }
+      },
+      {
+        suite: 'HTML Minifier',
+        name: 'Byte calculations and percentage saved accuracy',
+        run: () => {
+          const input = '<div>       \n\n\n     <p>   Compressed   </p>   </div>';
+          const res = DevForgeTools.HTMLMinifierEngine.minify(input);
+          if (res.minifiedSize >= res.originalSize) throw new Error('Minified size should be smaller');
+          if (parseFloat(res.percentSaved) <= 0) throw new Error('Percent saved must be > 0%');
+        }
+      },
+
+      // ==========================================
+      // 3. CSS Beautifier & Minifier (8 tests)
+      // ==========================================
+      {
+        suite: 'CSS Beautifier & Minifier',
+        name: 'Proper indentation and one declaration per line',
+        run: () => {
+          const input = '.card{color:black;background:white;padding:10px}';
+          const out = DevForgeTools.CSSBeautifierEngine.beautify(input);
+          const lines = out.split('\n');
+          if (lines.length < 5) throw new Error('Declarations not split into multiple lines');
+          if (!lines[1].startsWith('  color: black;')) throw new Error('Indentation or colon spacing failed');
+        }
+      },
+      {
+        suite: 'CSS Beautifier & Minifier',
+        name: 'Proper nested formatting for @media queries',
+        run: () => {
+          const input = '@media (min-width: 768px){.nav{display:flex;}}';
+          const out = DevForgeTools.CSSBeautifierEngine.beautify(input);
+          if (!out.includes('@media (min-width: 768px) {')) throw new Error('Media query line failed');
+          if (!out.includes('    display: flex;')) throw new Error('Nested rule not indented 4 spaces');
+        }
+      },
+      {
+        suite: 'CSS Beautifier & Minifier',
+        name: 'Preservation and formatting for @keyframes animations',
+        run: () => {
+          const input = '@keyframes pulse{0%{opacity:0;}100%{opacity:1;}}';
+          const out = DevForgeTools.CSSBeautifierEngine.beautify(input);
+          if (!out.includes('@keyframes pulse {')) throw new Error('Keyframes not formatted');
+          if (!out.includes('opacity: 1;')) throw new Error('Keyframe declaration missing');
+        }
+      },
+      {
+        suite: 'CSS Beautifier & Minifier',
+        name: 'Preservation of url("data:image/svg+xml;...") with colons & semicolons',
+        run: () => {
+          const dataUrl = 'url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\'></svg>")';
+          const input = `.icon { background-image: ${dataUrl}; display: block; }`;
+          const out = DevForgeTools.CSSBeautifierEngine.beautify(input);
+          if (!out.includes(dataUrl)) throw new Error('Data URI was split or corrupted by CSS formatter');
+        }
+      },
+      {
+        suite: 'CSS Beautifier & Minifier',
+        name: 'Preservation of CSS comments in beautified output',
+        run: () => {
+          const input = '/* Primary Theme */\n.btn { color: red; }';
+          const out = DevForgeTools.CSSBeautifierEngine.beautify(input);
+          if (!out.includes('/* Primary Theme */')) throw new Error('Comment lost during beautification');
+        }
+      },
+      {
+        suite: 'CSS Beautifier & Minifier',
+        name: 'CSS Minifier removes comments and collapses spaces',
+        run: () => {
+          const input = '/* Header styling */\n.header {\n  display: flex;\n  align-items: center;\n}';
+          const res = DevForgeTools.CSSBeautifierEngine.minify(input);
+          if (res.minified.includes('/*')) throw new Error('Comment not removed in minification');
+          if (res.minified.includes(' ')) throw new Error('Spaces should be removed in minification');
+          if (res.minified !== '.header{display:flex;align-items:center}') throw new Error(`Got: ${res.minified}`);
+        }
+      },
+      {
+        suite: 'CSS Beautifier & Minifier',
+        name: 'CSS Minifier trailing semicolon removal before closing brace',
+        run: () => {
+          const input = '.box { width: 100px; height: 100px; }';
+          const res = DevForgeTools.CSSBeautifierEngine.minify(input);
+          if (res.minified.endsWith(';}')) throw new Error('Trailing semicolon before closing brace should be stripped');
+        }
+      },
+      {
+        suite: 'CSS Beautifier & Minifier',
+        name: 'CSS Minifier size comparison statistics',
+        run: () => {
+          const input = '.a { color: red; } .b { color: blue; }';
+          const res = DevForgeTools.CSSBeautifierEngine.minify(input);
+          if (res.savedBytes <= 0 || res.minifiedSize >= res.originalSize) {
+            throw new Error('Size reduction calculation error');
+          }
+        }
+      },
+
+      // ==========================================
+      // 4. Base64 Encoder & Decoder (8 tests)
+      // ==========================================
+      {
+        suite: 'Base64 Encoder & Decoder',
+        name: 'Standard ASCII text encode and decode roundtrip',
+        run: () => {
+          const input = 'Hello World from DevForge Tools!';
+          const encoded = DevForgeTools.Base64Engine.encode(input);
+          const decoded = DevForgeTools.Base64Engine.decode(encoded);
+          if (decoded !== input) throw new Error(`Roundtrip failed: ${decoded}`);
+        }
+      },
+      {
+        suite: 'Base64 Encoder & Decoder',
+        name: 'UTF-8 Safe Unicode emojis (🚀 🎉 🌍) roundtrip without btoa error',
+        run: () => {
+          const input = 'Launch: 🚀 Celebration: 🎉 World: 🌍 Fire: 🔥';
+          const encoded = DevForgeTools.Base64Engine.encode(input);
+          const decoded = DevForgeTools.Base64Engine.decode(encoded);
+          if (decoded !== input) throw new Error(`Unicode emoji failed. Got: ${decoded}`);
+        }
+      },
+      {
+        suite: 'Base64 Encoder & Decoder',
+        name: 'CJK and Cyrillic non-Latin UTF-8 roundtrip',
+        run: () => {
+          const input = '日本語テキスト • Русский текст • العربية';
+          const encoded = DevForgeTools.Base64Engine.encode(input);
+          const decoded = DevForgeTools.Base64Engine.decode(encoded);
+          if (decoded !== input) throw new Error(`Multilingual roundtrip failed. Got: ${decoded}`);
+        }
+      },
+      {
+        suite: 'Base64 Encoder & Decoder',
+        name: 'URL-Safe Base64 encoding (replacing + with - and / with _)',
+        run: () => {
+          // Binary that produces + and / in standard Base64
+          const input = 'subjects?_d=1&test=true>>>';
+          const standard = DevForgeTools.Base64Engine.encode(input, { urlSafe: false });
+          const urlSafe = DevForgeTools.Base64Engine.encode(input, { urlSafe: true });
+          if (urlSafe.includes('+') || urlSafe.includes('/')) throw new Error('URL-safe string contains + or /');
+        }
+      },
+      {
+        suite: 'Base64 Encoder & Decoder',
+        name: 'URL-Safe Base64 decoding',
+        run: () => {
+          const input = 'DevForge_Safe-URL-Encoding';
+          const encoded = DevForgeTools.Base64Engine.encode(input, { urlSafe: true });
+          const decoded = DevForgeTools.Base64Engine.decode(encoded, { urlSafe: true });
+          if (decoded !== input) throw new Error(`URL-safe decode failed. Got: ${decoded}`);
+        }
+      },
+      {
+        suite: 'Base64 Encoder & Decoder',
+        name: 'Base64 padding stripped and safely decoded without padding',
+        run: () => {
+          const input = 'Padding Test String';
+          const encodedNoPad = DevForgeTools.Base64Engine.encode(input, { stripPadding: true });
+          if (encodedNoPad.endsWith('=')) throw new Error('Padding not stripped');
+          const decoded = DevForgeTools.Base64Engine.decode(encodedNoPad);
+          if (decoded !== input) throw new Error('Failed to decode unpadded Base64');
+        }
+      },
+      {
+        suite: 'Base64 Encoder & Decoder',
+        name: 'Invalid Base64 characters error detection',
+        run: () => {
+          const invalid = 'This is not valid base64!!!@#$';
+          try {
+            DevForgeTools.Base64Engine.decode(invalid);
+            throw new Error('Should have thrown an error for invalid Base64');
+          } catch (e) {
+            if (!e.message.includes('Invalid Base64')) throw e;
+          }
+        }
+      },
+      {
+        suite: 'Base64 Encoder & Decoder',
+        name: 'Empty string encode and decode handling',
+        run: () => {
+          const enc = DevForgeTools.Base64Engine.encode('');
+          const dec = DevForgeTools.Base64Engine.decode('');
+          if (enc !== '' || dec !== '') throw new Error('Empty string handling failed');
+        }
+      },
+
+      // ==========================================
+      // 5. URL Encoder & Decoder (8 tests)
+      // ==========================================
+      {
+        suite: 'URL Encoder & Decoder',
+        name: 'encodeURIComponent mode encodes reserved query characters (&, =, ?, /)',
+        run: () => {
+          const input = 'param=value&token=123/xyz?key=test';
+          const encoded = DevForgeTools.URLEngine.encode(input, 'component');
+          if (encoded.includes('&') || encoded.includes('=') || encoded.includes('?')) {
+            throw new Error('Component mode must encode &, =, and ?');
+          }
+        }
+      },
+      {
+        suite: 'URL Encoder & Decoder',
+        name: 'encodeURI mode preserves full URL protocol and path separators',
+        run: () => {
+          const input = 'https://devforge.tools/search?q=developer tools&page=1';
+          const encoded = DevForgeTools.URLEngine.encode(input, 'full');
+          if (!encoded.startsWith('https://devforge.tools/search?q=')) {
+            throw new Error('encodeURI should preserve https:// and ?');
+          }
+          if (encoded.includes(' ')) throw new Error('Space was not encoded');
+        }
+      },
+      {
+        suite: 'URL Encoder & Decoder',
+        name: 'Spaces encoded properly to %20 and decoded back',
+        run: () => {
+          const input = 'developer friendly tools';
+          const encoded = DevForgeTools.URLEngine.encode(input, 'component');
+          if (!encoded.includes('%20')) throw new Error('Spaces should be %20');
+          const decoded = DevForgeTools.URLEngine.decode(encoded, 'component');
+          if (decoded !== input) throw new Error('Decode mismatch');
+        }
+      },
+      {
+        suite: 'URL Encoder & Decoder',
+        name: 'Query string parser parses multiple parameters correctly',
+        run: () => {
+          const input = 'https://api.example.com/v1/users?role=admin&active=true&sort=desc';
+          const parsed = DevForgeTools.URLEngine.parseQuery(input);
+          if (parsed.baseUrl !== 'https://api.example.com/v1/users') throw new Error('Base URL wrong');
+          if (parsed.params.length !== 3) throw new Error(`Expected 3 params, got ${parsed.params.length}`);
+          if (parsed.params[0].key !== 'role' || parsed.params[0].value !== 'admin') throw new Error('Param 0 mismatch');
+        }
+      },
+      {
+        suite: 'URL Encoder & Decoder',
+        name: 'Query parser handles percent-encoded keys and values',
+        run: () => {
+          const input = '?greeting=Hello%20World&user%40domain=test%2Bpass';
+          const parsed = DevForgeTools.URLEngine.parseQuery(input);
+          if (parsed.params[0].value !== 'Hello World') throw new Error('Value percent-decoding failed');
+          if (parsed.params[1].key !== 'user@domain') throw new Error('Key percent-decoding failed');
+        }
+      },
+      {
+        suite: 'URL Encoder & Decoder',
+        name: 'Rebuilding full URL from modified parameter array',
+        run: () => {
+          const base = 'https://devforge.tools/api';
+          const params = [{ key: 'search', value: 'react hooks' }, { key: 'page', value: '2' }];
+          const rebuilt = DevForgeTools.URLEngine.buildUrl(base, params);
+          if (rebuilt !== 'https://devforge.tools/api?search=react%20hooks&page=2') {
+            throw new Error(`Rebuild mismatch: ${rebuilt}`);
+          }
+        }
+      },
+      {
+        suite: 'URL Encoder & Decoder',
+        name: 'Malformed URI sequence error reporting',
+        run: () => {
+          try {
+            DevForgeTools.URLEngine.decode('%E0%A4%A', 'component');
+            throw new Error('Should have thrown malformed URI error');
+          } catch (e) {
+            if (!e.message.includes('Malformed URI sequence')) throw e;
+          }
+        }
+      },
+      {
+        suite: 'URL Encoder & Decoder',
+        name: 'Empty query input returns empty params array without error',
+        run: () => {
+          const res = DevForgeTools.URLEngine.parseQuery('');
+          if (res.params.length !== 0) throw new Error('Expected 0 params for empty input');
+        }
+      },
+
+      // ==========================================
+      // 6. UUID Generator (8 tests)
+      // ==========================================
+      {
+        suite: 'UUID Generator (v4 & v7)',
+        name: 'UUIDv4 matches RFC 4122 regex format',
+        run: () => {
+          const uuid = DevForgeTools.UUIDEngine.generateV4();
+          const regex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
+          if (!regex.test(uuid)) throw new Error(`Generated UUIDv4 does not match RFC 4122: ${uuid}`);
+        }
+      },
+      {
+        suite: 'UUID Generator (v4 & v7)',
+        name: 'UUIDv4 version bit is strictly 4',
+        run: () => {
+          for (let i = 0; i < 10; i++) {
+            const uuid = DevForgeTools.UUIDEngine.generateV4();
+            const parts = uuid.split('-');
+            if (parts[2][0] !== '4') throw new Error(`Version character is not 4 in ${uuid}`);
+          }
+        }
+      },
+      {
+        suite: 'UUID Generator (v4 & v7)',
+        name: 'UUIDv4 variant bits are strictly RFC 4122 (8, 9, a, or b)',
+        run: () => {
+          for (let i = 0; i < 10; i++) {
+            const uuid = DevForgeTools.UUIDEngine.generateV4();
+            const parts = uuid.split('-');
+            const variantChar = parts[3][0].toLowerCase();
+            if (!['8', '9', 'a', 'b'].includes(variantChar)) {
+              throw new Error(`Variant character '${variantChar}' is not valid RFC 4122 in ${uuid}`);
+            }
+          }
+        }
+      },
+      {
+        suite: 'UUID Generator (v4 & v7)',
+        name: 'UUIDv7 matches RFC 9562 regex format',
+        run: () => {
+          const uuid = DevForgeTools.UUIDEngine.generateV7();
+          const regex = /^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
+          if (!regex.test(uuid)) throw new Error(`Generated UUIDv7 does not match RFC 9562: ${uuid}`);
+        }
+      },
+      {
+        suite: 'UUID Generator (v4 & v7)',
+        name: 'UUIDv7 timestamp ordering monotonicity check',
+        run: () => {
+          const uuid1 = DevForgeTools.UUIDEngine.generateV7();
+          // Short delay to ensure distinct timestamp
+          const start = Date.now();
+          while (Date.now() - start < 3) {}
+          const uuid2 = DevForgeTools.UUIDEngine.generateV7();
+          // Lexicographical comparison: uuid1 should be <= uuid2
+          if (uuid1 > uuid2) {
+            throw new Error(`UUIDv7 timestamp monotonicity violated: ${uuid1} vs ${uuid2}`);
+          }
+        }
+      },
+      {
+        suite: 'UUID Generator (v4 & v7)',
+        name: 'Bulk generation produces exact count with 100% uniqueness',
+        run: () => {
+          const bulk = DevForgeTools.UUIDEngine.generateBulk(100, 'v4');
+          if (bulk.length !== 100) throw new Error(`Expected 100 UUIDs, got ${bulk.length}`);
+          const uniqueSet = new Set(bulk);
+          if (uniqueSet.size !== 100) throw new Error('Duplicate UUIDs detected in bulk generation');
+        }
+      },
+      {
+        suite: 'UUID Generator (v4 & v7)',
+        name: 'Formatting options: uppercase conversion and hyphen removal',
+        run: () => {
+          const uuid = DevForgeTools.UUIDEngine.generateV4({ uppercase: true, hyphens: false });
+          if (uuid.includes('-')) throw new Error('Hyphens were not removed');
+          if (uuid !== uuid.toUpperCase()) throw new Error('UUID was not converted to uppercase');
+          if (uuid.length !== 32) throw new Error(`Expected 32 chars without hyphens, got ${uuid.length}`);
+        }
+      },
+      {
+        suite: 'UUID Generator (v4 & v7)',
+        name: 'Formatting options: braces wrapping {...}',
+        run: () => {
+          const uuid = DevForgeTools.UUIDEngine.generateV4({ braces: true });
+          if (!uuid.startsWith('{') || !uuid.endsWith('}')) {
+            throw new Error(`Braces not applied: ${uuid}`);
+          }
+        }
+      }
+    ];
+
+    function runAllTests() {
+      const container = document.getElementById('test-results-container');
+      container.innerHTML = '';
+
+      let passed = 0;
+      let failed = 0;
+      const startTime = performance.now();
+
+      // Group by suite
+      const suites = {};
+      tests.forEach(t => {
+        if (!suites[t.suite]) suites[t.suite] = [];
+        suites[t.suite].push(t);
+      });
+
+      Object.keys(suites).forEach(suiteName => {
+        const suiteDiv = document.createElement('div');
+        suiteDiv.style.marginBottom = '2rem';
+        suiteDiv.innerHTML = `<h2 style="font-size: 1.25rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">${suiteName}</h2>`;
+
+        suites[suiteName].forEach(test => {
+          const card = document.createElement('div');
+          card.className = 'test-card';
+
+          try {
+            test.run();
+            passed++;
+            card.classList.add('test-pass');
+            card.innerHTML = `
+              <div>
+                <div style="font-weight: 600; font-size: 0.9375rem; color: var(--text-primary);">${DevForgeTools.escapeHtml(test.name)}</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">Assertion passed cleanly</div>
+              </div>
+              <span class="badge-pass">PASS</span>
+            `;
+          } catch (err) {
+            failed++;
+            card.classList.add('test-fail');
+            card.innerHTML = `
+              <div>
+                <div style="font-weight: 600; font-size: 0.9375rem; color: var(--text-primary);">${DevForgeTools.escapeHtml(test.name)}</div>
+                <div style="font-size: 0.8125rem; color: #ef4444; margin-top: 0.25rem; font-family: monospace;">${DevForgeTools.escapeHtml(err.message)}</div>
+              </div>
+              <span class="badge-fail">FAIL</span>
+            `;
+          }
+
+          suiteDiv.appendChild(card);
+        });
+
+        container.appendChild(suiteDiv);
+      });
+
+      const duration = Math.round(performance.now() - startTime);
+      document.getElementById('stat-total').textContent = tests.length;
+      document.getElementById('stat-passed').textContent = passed;
+      document.getElementById('stat-failed').textContent = failed;
+      document.getElementById('stat-time').textContent = `${duration} ms`;
+
+      console.log(`[DevForge Test Suite] Finished: ${passed}/${tests.length} tests passed in ${duration}ms.`);
+    }
+
+    document.addEventListener('DOMContentLoaded', runAllTests);
+  </script>
+</body>
+</html>

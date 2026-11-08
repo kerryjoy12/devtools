@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Base64 Encoder & Decoder – UTF-8 Safe, URL-Safe Tool</title>
+  <meta name="description" content="Encode and decode Base64 online with 100% UTF-8 and emoji safety. Convert text, files, and images to Base64 and Data URIs with URL-safe options. Zero data uploads.">
+  <link rel="canonical" href="https://devforge.tools/tools/base64-encoder.html">
+  <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
+  <link rel="stylesheet" href="/assets/css/styles.css">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://devforge.tools/tools/base64-encoder.html">
+  <meta property="og:title" content="Base64 Encoder & Decoder – UTF-8 Safe, URL-Safe Tool">
+  <meta property="og:description" content="Encode and decode Base64 online with 100% UTF-8 and emoji safety. Convert text, files, and images with URL-safe options.">
+  <meta property="og:image" content="https://devforge.tools/assets/img/favicon.svg">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Base64 Encoder & Decoder – DevForge Tools">
+  <meta name="twitter:description" content="Encode and decode Base64 online with UTF-8 safety and 100% client-side privacy.">
+  <meta name="twitter:image" content="https://devforge.tools/assets/img/favicon.svg">
+
+  <!-- Google AdSense Placeholder (Replace ca-pub-XXXXXXXXXXXXXXXX) -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "Base64 Encoder & Decoder",
+        "url": "https://devforge.tools/tools/base64-encoder.html",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "All",
+        "description": "Encode and decode Base64 with UTF-8 support, URL-safe mode, and file-to-Data URI conversion.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://devforge.tools/" },
+          { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://devforge.tools/#tools" },
+          { "@type": "ListItem", "position": 3, "name": "Base64 Encoder & Decoder", "item": "https://devforge.tools/tools/base64-encoder.html" }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Why does window.btoa fail on emojis and non-Latin characters in JavaScript?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The native window.btoa method only supports Latin-1 binary strings (code points 0x00 to 0xFF). When passing UTF-8 multi-byte characters like emojis or Asian scripts, it throws an InvalidCharacterError. DevForge encodes characters into UTF-8 byte streams using TextEncoder prior to Base64 serialization."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is URL-Safe Base64 (RFC 4648 Section 5)?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Standard Base64 uses + and / which have special meanings in URLs and query strings. URL-safe Base64 substitutes + with - (hyphen) and / with _ (underscore), and typically omits trailing = padding so strings can be safely passed inside URLs and JSON Web Tokens (JWTs)."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is Base64 an encryption algorithm?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Base64 is strictly a binary-to-text encoding scheme, not encryption. It provides zero confidentiality because anyone can decode it instantly without a secret key."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why does Base64 increase data size by approximately 33%?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Base64 represents 6 bits of binary information using 8 bits (1 ASCII byte). Because 3 raw bytes (24 bits) are mapped onto 4 Base64 characters (24 bits), the encoded output expands by a ratio of 4/3, or approximately 33.3%."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I convert images to Data URIs for inline CSS or HTML?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. DevForge includes a file-to-Base64 converter that generates ready-to-use data:image/png;base64,... URI strings with live thumbnail preview."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="brand-link">
+        <svg class="w-6 h-6 text-cyan-500" viewBox="0 0 32 32" fill="none" style="width:26px;height:26px;" aria-hidden="true">
+          <rect width="32" height="32" rx="7" fill="#0f172a"/>
+          <path d="M10 11L5 16L10 21" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M22 11L27 16L22 21" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M18 9L14 23" stroke="#818cf8" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="16" cy="16" r="1.5" fill="#38bdf8"/>
+        </svg>
+        <span>DevForge Tools</span>
+      </a>
+
+      <nav class="nav-links">
+        <div class="nav-dropdown">
+          <a href="/#tools" class="nav-item active">Tools <span style="font-size: 0.65rem;">▼</span></a>
+          <div class="dropdown-menu">
+            <a href="/tools/json-formatter.html" class="dropdown-item">JSON Formatter & Validator</a>
+            <a href="/tools/html-minifier.html" class="dropdown-item">HTML Minifier</a>
+            <a href="/tools/css-beautifier.html" class="dropdown-item">CSS Beautifier & Minifier</a>
+            <a href="/tools/base64-encoder.html" class="dropdown-item">Base64 Encoder & Decoder</a>
+            <a href="/tools/url-encoder.html" class="dropdown-item">URL Encoder & Decoder</a>
+            <a href="/tools/uuid-generator.html" class="dropdown-item">UUID Generator (v4 & v7)</a>
+          </div>
+        </div>
+        <a href="/blog/" class="nav-item">Blog</a>
+        <a href="/about.html" class="nav-item">About</a>
+        <a href="/contact.html" class="nav-item">Contact</a>
+      </nav>
+
+      <div class="header-actions">
+        <a href="/#tools" class="btn btn-sm">All Tools</a>
+        <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle navigation menu" aria-expanded="false" onclick="DevForgeUI.toggleMobileMenu()">
+          <svg class="hamburger-icon" style="width:20px;height:20px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <svg class="close-icon" style="width:20px;height:20px;display:none;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding-top: 1.5rem; padding-bottom: 4rem;">
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span>/</span>
+      <a href="/#tools">Tools</a>
+      <span>/</span>
+      <span style="color: var(--text-primary); font-weight: 500;">Base64 Encoder & Decoder</span>
+    </nav>
+
+    <!-- Header info -->
+    <div style="margin-bottom: 1.5rem;">
+      <h1 style="font-size: 2rem; margin-bottom: 0.5rem;">Base64 Encoder & Decoder</h1>
+      <p style="color: var(--text-secondary); margin: 0; max-width: 800px;">
+        Encode and decode Base64 with complete UTF-8 Unicode safety (no <code>btoa</code> emoji crashes). Convert text, files, and images with URL-safe (RFC 4648) and padding options.
+      </p>
+    </div>
+
+    <!-- Controls Strip -->
+    <div class="controls-bar">
+      <div class="control-group">
+        <label for="mode-select" style="font-size: 0.8125rem; font-weight: 500;">Action:</label>
+        <select id="mode-select" class="form-select" onchange="runProcess()">
+          <option value="encode">Encode to Base64</option>
+          <option value="decode">Decode from Base64</option>
+        </select>
+
+        <label style="display: flex; align-items: center; gap: 0.375rem; font-size: 0.8125rem; cursor: pointer;">
+          <input type="checkbox" id="opt-urlsafe" onchange="runProcess()">
+          <span>URL-Safe (- and _)</span>
+        </label>
+
+        <label style="display: flex; align-items: center; gap: 0.375rem; font-size: 0.8125rem; cursor: pointer;">
+          <input type="checkbox" id="opt-strippadding" onchange="runProcess()">
+          <span>Strip Padding (=)</span>
+        </label>
+      </div>
+
+      <div class="control-group">
+        <button class="btn btn-primary" onclick="runProcess()">Execute (Ctrl+Enter)</button>
+        <button class="btn" onclick="loadExample()">Load Example</button>
+        <button class="btn" onclick="clearInput()">Clear</button>
+      </div>
+    </div>
+
+    <!-- Error / Status Box -->
+    <div id="status-box" class="status-box" style="display: none;" role="alert" aria-live="polite"></div>
+
+    <!-- Image Preview Container (if image file loaded) -->
+    <div id="image-preview-container" style="display: none; margin-top: 1rem; padding: 1rem; background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 0.5rem;">
+      <div style="font-size: 0.8125rem; font-weight: 600; margin-bottom: 0.5rem;">Data URI Image Preview:</div>
+      <img id="image-preview" src="" alt="Base64 Preview" style="max-height: 180px; max-width: 100%; border-radius: 0.25rem; border: 1px solid var(--border-color); background: repeating-conic-gradient(#80808020 0% 25%, transparent 0% 50%) 50% / 16px 16px;" />
+    </div>
+
+    <!-- Two-Pane Workspace -->
+    <div class="tool-workspace">
+      <!-- Input Pane -->
+      <div class="pane">
+        <div class="pane-header">
+          <div class="pane-title">
+            <span id="input-pane-title">Input (Plain Text)</span>
+            <span id="input-bytes" style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;">0 chars</span>
+          </div>
+          <div class="pane-actions">
+            <button class="btn btn-sm" onclick="pasteFromClipboard()">Paste Clipboard</button>
+            <label class="btn btn-sm" style="cursor: pointer; margin: 0;">
+              File to Base64
+              <input type="file" id="file-uploader" style="display: none;" onchange="handleFileUpload(event)">
+            </label>
+          </div>
+        </div>
+        <div class="pane-editor">
+          <textarea id="base64-input" class="code-textarea" placeholder="Type or paste plain text to encode, or paste Base64 to decode..." spellcheck="false"></textarea>
+        </div>
+        <div class="pane-footer">
+          <span>Tip: Supports UTF-8 emojis (🚀), CJK scripts, and binary files</span>
+          <span>Shortcut: Ctrl+Enter</span>
+        </div>
+      </div>
+
+      <!-- Output Pane -->
+      <div class="pane">
+        <div class="pane-header">
+          <div class="pane-title">
+            <span id="output-pane-title">Base64 Output</span>
+            <span id="output-bytes" style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;">0 chars</span>
+          </div>
+          <div class="pane-actions">
+            <button class="btn btn-sm" onclick="swapInputOutput()">Swap ⇄</button>
+            <button class="btn btn-sm" onclick="copyOutput()">Copy</button>
+            <button class="btn btn-sm" onclick="downloadOutput()">Download .txt</button>
+          </div>
+        </div>
+        <div class="pane-editor">
+          <textarea id="base64-output" class="code-textarea" readonly placeholder="Result will appear here automatically..." spellcheck="false"></textarea>
+        </div>
+        <div class="pane-footer">
+          <span id="process-summary">Ready</span>
+          <span>100% Client-Side</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Deep Technical Content (700+ Words) -->
+    <article class="content-section">
+      <h2>Understanding Base64 Encoding: Specification and Mechanics</h2>
+      <p>
+        Base64 is a binary-to-text encoding scheme standardized under <a href="https://www.rfc-editor.org/rfc/rfc4648" target="_blank" rel="noopener">IETF RFC 4648</a>. It is designed to safely transport arbitrary binary byte sequences across legacy text-only channels—such as SMTP email (MIME), HTTP headers, URLs, and JSON payloads—that might otherwise truncate or corrupt non-printable control characters or multi-byte values.
+      </p>
+
+      <h3>How Base64 Radix-64 Math Works</h3>
+      <p>
+        Computers store information in 8-bit bytes (octets), representing $2^8 = 256$ possible values. Base64 divides incoming byte streams into 6-bit chunks ($2^6 = 64$ values), mapping each 6-bit integer to an unambiguous ASCII glyph from a standardized 64-character alphabet:
+      </p>
+      <ul>
+        <li>Characters <code>0</code>–<code>25</code>: Uppercase <code>A</code>–<code>Z</code></li>
+        <li>Characters <code>26</code>–<code>51</code>: Lowercase <code>a</code>–<code>z</code></li>
+        <li>Characters <code>52</code>–<code>61</code>: Digits <code>0</code>–<code>9</code></li>
+        <li>Character <code>62</code>: Standard <code>+</code> (or <code>-</code> in URL-Safe mode)</li>
+        <li>Character <code>63</code>: Standard <code>/</code> (or <code>_</code> in URL-Safe mode)</li>
+      </ul>
+      <p>
+        Because $3 \text{ bytes} \times 8 \text{ bits} = 24 \text{ bits}$, exactly 3 raw bytes align into $4 \times 6\text{-bit}$ Base64 symbols. If the input byte length is not a multiple of 3, padding characters (<code>=</code>) are appended to complete the 4-character alignment boundary.
+      </p>
+
+      <h3>Solving the Infamous JavaScript <code>btoa</code> Unicode Bug</h3>
+      <p>
+        Many online Base64 tools fail when users input emojis (e.g. 🚀, 🎉) or international characters (Japanese, Chinese, Arabic, Cyrillic, accented vowels). This happens because legacy browser implementations of <code>window.btoa()</code> treat strings strictly as 1-byte binary sequences (ISO-8859-1). Passing a character with a code point above 255 throws a fatal JavaScript <code>InvalidCharacterError</code>:
+      </p>
+      <pre><code>// ❌ Classic browser failure:
+window.btoa("🚀 Hello World"); // Throws InvalidCharacterError!
+
+// ✅ DevForge UTF-8 Safe Implementation:
+const bytes = new TextEncoder().encode("🚀 Hello World");
+const binString = Array.from(bytes, byte => String.fromCharCode(byte)).join('');
+const safeBase64 = btoa(binString); // Clean, uncorrupted output!</code></pre>
+      <p>
+        DevForge implements complete UTF-8 serialization using native <code>TextEncoder</code> and <code>TextDecoder</code>, ensuring 100% fidelity regardless of language or emoji complexity.
+      </p>
+
+      <h3>Standard Base64 vs. URL-Safe Base64 (RFC 4648 §5)</h3>
+      <p>
+        In standard Base64, the characters <code>+</code> and <code>/</code> create major hazards when embedded in HTTP query parameters or web URLs. A plus sign (<code>+</code>) is frequently interpreted by web servers as an encoded space character, corrupting the decoded payload. Furthermore, forward slashes (<code>/</code>) interfere with path routing.
+      </p>
+      <blockquote>
+        URL-Safe Base64 solves this by replacing <code>+</code> with a hyphen (<code>-</code>) and <code>/</code> with an underscore (<code>_</code>). Additionally, URL-safe implementations (such as JSON Web Tokens / JWT base64url) frequently strip trailing <code>=</code> padding characters to ensure lean, safe URL parameters.
+      </blockquote>
+
+      <h3>Step-by-Step Usage Guide</h3>
+      <ul>
+        <li><strong>Step 1:</strong> Select your desired operation: <em>Encode to Base64</em> or <em>Decode from Base64</em>.</li>
+        <li><strong>Step 2:</strong> Paste your text into the left pane, or click <em>File to Base64</em> to upload any image or binary file from your hard drive.</li>
+        <li><strong>Step 3 (Options):</strong> Check <em>URL-Safe (- and _)</em> if you are embedding the output in web addresses, cookies, or JWTs. Check <em>Strip Padding (=)</em> if your receiver mandates unpadded base64url strings.</li>
+        <li><strong>Step 4:</strong> Click <em>Copy</em> or <em>Download .txt</em> to use the encoded output.</li>
+      </ul>
+
+      <h3>Common Base64 Misconceptions and Security Realities</h3>
+      <ol>
+        <li>
+          <strong>Base64 Is NOT Encryption:</strong> Encoding obfuscates human readability, but offers zero cryptographic security. Anyone with access to the encoded string can decode it in milliseconds without a secret key. Never use Base64 as a substitute for AES, RSA, or TLS encryption.
+        </li>
+        <li>
+          <strong>The 33% Size Penalty:</strong> Converting raw binary data (such as JPEG images or PDF documents) into Base64 increases the file size by 33.3%. While inline Data URIs eliminate an extra HTTP request, embedding large images directly in CSS or HTML increases initial DOM payload sizes and bypasses browser asset caching.
+        </li>
+      </ol>
+
+      <h3>Frequently Asked Questions</h3>
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+          <span>Why does window.btoa fail on emojis and non-Latin characters in JavaScript?</span>
+          <span class="faq-icon">▼</span>
+        </button>
+        <div class="faq-answer">
+          The native window.btoa method only supports Latin-1 binary strings (code points 0x00 to 0xFF). When passing UTF-8 multi-byte characters like emojis or Asian scripts, it throws an InvalidCharacterError. DevForge encodes characters into UTF-8 byte streams using TextEncoder prior to Base64 serialization.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+          <span>What is URL-Safe Base64 (RFC 4648 Section 5)?</span>
+          <span class="faq-icon">▼</span>
+        </button>
+        <div class="faq-answer">
+          Standard Base64 uses + and / which have special meanings in URLs and query strings. URL-safe Base64 substitutes + with - (hyphen) and / with _ (underscore), and typically omits trailing = padding so strings can be safely passed inside URLs and JSON Web Tokens (JWTs).
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+          <span>Is Base64 an encryption algorithm?</span>
+          <span class="faq-icon">▼</span>
+        </button>
+        <div class="faq-answer">
+          No. Base64 is strictly a binary-to-text encoding scheme, not encryption. It provides zero confidentiality because anyone can decode it instantly without a secret key.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+          <span>Why does Base64 increase data size by approximately 33%?</span>
+          <span class="faq-icon">▼</span>
+        </button>
+        <div class="faq-answer">
+          Base64 represents 6 bits of binary information using 8 bits (1 ASCII byte). Because 3 raw bytes (24 bits) are mapped onto 4 Base64 characters (24 bits), the encoded output expands by a ratio of 4/3, or approximately 33.3%.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+          <span>Can I convert images to Data URIs for inline CSS or HTML?</span>
+          <span class="faq-icon">▼</span>
+        </button>
+        <div class="faq-answer">
+          Yes. DevForge includes a file-to-Base64 converter that generates ready-to-use data:image/png;base64,... URI strings with live thumbnail preview.
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>DevForge Tools</h4>
+          <p style="color: var(--text-muted); font-size: 0.8125rem;">100% client-side developer utilities running locally in your browser. Format, minify, and encode with complete confidentiality.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Related Tools</h4>
+          <ul>
+            <li><a href="/tools/url-encoder.html">URL Encoder & Decoder</a></li>
+            <li><a href="/tools/json-formatter.html">JSON Formatter & Validator</a></li>
+            <li><a href="/tools/uuid-generator.html">UUID Generator</a></li>
+            <li><a href="/tools/html-minifier.html">HTML Minifier</a></li>
+            <li><a href="/tools/css-beautifier.html">CSS Beautifier</a></li>
+            <li><a href="/tests/tool-tests.html">Automated Test Suite</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Related Guides</h4>
+          <ul>
+            <li><a href="/blog/base64-encoding-explained-what-it-is-and-when-to-use-it.html">Base64 Encoding Explained</a></li>
+            <li><a href="/blog/is-base64-encryption-common-security-misconceptions.html">Is Base64 Encryption?</a></li>
+            <li><a href="/blog/encodeuri-vs-encodeuricomponent-the-difference-that-breaks-urls.html">encodeURI vs encodeURIComponent</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Legal & Trust</h4>
+          <ul>
+            <li><a href="/about.html">About & Mission</a></li>
+            <li><a href="/contact.html">Contact Us</a></li>
+            <li><a href="/privacy-policy.html">Privacy Policy</a></li>
+            <li><a href="/terms-of-service.html">Terms of Service</a></li>
+            <li><a href="/cookie-policy.html">Cookie Policy</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 DevForge Tools. All tools run 100% client-side. Zero telemetry.</div>
+        <div style="display: flex; gap: 1rem; align-items: center;">
+          <a href="/privacy-policy.html">Privacy</a>
+          <span>·</span>
+          <a href="/terms-of-service.html">Terms</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/tools-engine.js"></script>
+  <script src="/assets/js/core.js"></script>
+  <script>
+    let debounceTimer = null;
+    const inputArea = document.getElementById('base64-input');
+    const outputArea = document.getElementById('base64-output');
+    const modeSelect = document.getElementById('mode-select');
+    const urlSafeCheckbox = document.getElementById('opt-urlsafe');
+    const stripPaddingCheckbox = document.getElementById('opt-strippadding');
+    const statusBox = document.getElementById('status-box');
+    const inputTitle = document.getElementById('input-pane-title');
+    const outputTitle = document.getElementById('output-pane-title');
+    const inputBytes = document.getElementById('input-bytes');
+    const outputBytes = document.getElementById('output-bytes');
+    const summarySpan = document.getElementById('process-summary');
+    const imageContainer = document.getElementById('image-preview-container');
+    const imagePreview = document.getElementById('image-preview');
+
+    DevForgeUI.wireDragAndDrop(inputArea, (text) => {
+      inputArea.value = text;
+      runProcess();
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        runProcess();
+      }
+    });
+
+    inputArea.addEventListener('input', () => {
+      const len = inputArea.value.length;
+      inputBytes.textContent = `${len.toLocaleString()} chars`;
+
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        if (inputArea.value.trim()) {
+          runProcess(true);
+        } else {
+          outputArea.value = '';
+          outputBytes.textContent = '0 chars';
+          statusBox.style.display = 'none';
+          imageContainer.style.display = 'none';
+          summarySpan.textContent = 'Ready';
+        }
+      }, len > 100000 ? 500 : 200);
+    });
+
+    function runProcess(isLive = false) {
+      const raw = inputArea.value;
+      if (!raw.trim()) {
+        if (!isLive) statusBox.style.display = 'none';
+        return;
+      }
+
+      const mode = modeSelect.value;
+      const urlSafe = urlSafeCheckbox.checked;
+      const stripPadding = stripPaddingCheckbox.checked;
+
+      if (mode === 'encode') {
+        inputTitle.textContent = 'Input (Plain Text)';
+        outputTitle.textContent = 'Base64 Output';
+        try {
+          const encoded = DevForgeTools.Base64Engine.encode(raw, { urlSafe, stripPadding });
+          outputArea.value = encoded;
+          outputBytes.textContent = `${encoded.length.toLocaleString()} chars`;
+          summarySpan.textContent = 'Encoded successfully';
+          showStatus('Text successfully encoded to Base64 (UTF-8 safe).', 'success');
+        } catch (err) {
+          showStatus(err.message, 'error');
+        }
+      } else {
+        inputTitle.textContent = 'Input (Base64)';
+        outputTitle.textContent = 'Decoded Plain Text';
+        try {
+          const decoded = DevForgeTools.Base64Engine.decode(raw, { urlSafe });
+          outputArea.value = decoded;
+          outputBytes.textContent = `${decoded.length.toLocaleString()} chars`;
+          summarySpan.textContent = 'Decoded successfully';
+          showStatus('Base64 successfully decoded.', 'success');
+        } catch (err) {
+          showStatus(err.message, 'error');
+          outputBytes.textContent = 'Error';
+        }
+      }
+    }
+
+    function showStatus(msg, type) {
+      statusBox.textContent = msg;
+      statusBox.className = `status-box ${type}`;
+      statusBox.style.display = 'flex';
+    }
+
+    function copyOutput() {
+      DevForgeUI.copyTextToClipboard(outputArea.value, 'Result copied to clipboard!');
+    }
+
+    function downloadOutput() {
+      DevForgeUI.downloadTextFile(outputArea.value, 'devforge-base64.txt', 'text/plain;charset=utf-8');
+    }
+
+    function clearInput() {
+      inputArea.value = '';
+      outputArea.value = '';
+      inputBytes.textContent = '0 chars';
+      outputBytes.textContent = '0 chars';
+      statusBox.style.display = 'none';
+      imageContainer.style.display = 'none';
+      summarySpan.textContent = 'Ready';
+    }
+
+    function swapInputOutput() {
+      if (!outputArea.value) return;
+      inputArea.value = outputArea.value;
+      modeSelect.value = modeSelect.value === 'encode' ? 'decode' : 'encode';
+      runProcess();
+    }
+
+    function pasteFromClipboard() {
+      if (navigator.clipboard && navigator.clipboard.readText) {
+        navigator.clipboard.readText().then(text => {
+          inputArea.value = text;
+          runProcess();
+        }).catch(() => DevForgeUI.showToast('Please use Ctrl+V to paste.', 'info'));
+      } else {
+        DevForgeUI.showToast('Please use Ctrl+V to paste.', 'info');
+      }
+    }
+
+    function handleFileUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      DevForgeTools.Base64Engine.fileToBase64(file).then(res => {
+        modeSelect.value = 'encode';
+        inputArea.value = `[Binary file loaded: ${res.fileName} (${(res.fileSize / 1024).toFixed(1)} KB, ${res.mimeType})]`;
+        outputArea.value = res.dataUri;
+        outputBytes.textContent = `${res.dataUri.length.toLocaleString()} chars`;
+        showStatus(`File ${res.fileName} converted to Data URI.`, 'success');
+
+        if (res.mimeType.startsWith('image/')) {
+          imagePreview.src = res.dataUri;
+          imageContainer.style.display = 'block';
+        } else {
+          imageContainer.style.display = 'none';
+        }
+      }).catch(err => {
+        showStatus('Failed to read file: ' + err.message, 'error');
+      });
+    }
+
+    function loadExample() {
+      modeSelect.value = 'encode';
+      inputArea.value = `DevForge Tools — High Performance & Absolute Privacy 🚀
+• Standard: RFC 4648 Radix-64
+• Multilingual UTF-8: 日本語 / 한국어 / العربية / Русский
+• Emoji Test: 🔒 🛡️ ⚡ 💻`;
+      runProcess();
+    }
+  </script>
+</body>
+</html>
